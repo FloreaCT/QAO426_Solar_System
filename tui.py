@@ -31,7 +31,7 @@ def menu():
 
     :return: None if invalid selection otherwise an integer corresponding to a valid selection
     """
-    
+
     print("Main Menu \n1. Load Data \n2. Process Data\n3. Visualise Data\n4. Save Data\n5. Exit ")
 
     while True:
@@ -40,20 +40,6 @@ def menu():
             print("You have entered and invalid option. Please try again entering a valid option.")
         else:
             return menu
-
-
-
-
-
-
-
-
-
-
-
-
-menu()
-
 
 
 def started(operation):
@@ -67,7 +53,10 @@ def started(operation):
     :param operation: A string indicating the operation being started
     :return: Does not return anything
     """
-    # TODO: Your code here
+
+    print(f"{operation} has started")
+
+    return
 
 
 def completed(operation):
