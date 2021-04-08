@@ -8,7 +8,14 @@ def welcome():
 
     :return: Does not return anything.
     """
-    # TODO: Your code here
+    message = "'Solar Record Management System'"
+
+    print("'" * len(message))
+    print(message)
+    print("'" * len(message))
+    return
+
+welcome()
 
 
 def menu():
@@ -26,7 +33,9 @@ def menu():
 
     :return: None if invalid selection otherwise an integer corresponding to a valid selection
     """
-    # TODO: Your code here
+
+
+
 
 
 def started(operation):
