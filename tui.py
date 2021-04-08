@@ -70,7 +70,9 @@ def completed(operation):
     :param operation: A string indicating the operation being completed
     :return: Does not return anything
     """
-    # TODO: Your code here
+    print(f"{operation} was completed")
+
+    return
 
 
 def error(error_msg):
