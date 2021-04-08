@@ -13,10 +13,8 @@ def welcome():
     print("'" * len(message))
     print(message)
     print("'" * len(message))
+
     return
-
-welcome()
-
 
 def menu():
     """
@@ -33,8 +31,28 @@ def menu():
 
     :return: None if invalid selection otherwise an integer corresponding to a valid selection
     """
+    
+    print("Main Menu \n1. Load Data \n2. Process Data\n3. Visualise Data\n4. Save Data\n5. Exit ")
+
+    while True:
+        menu = int(input())
+        if menu not in range(1,6):
+            print("You have entered and invalid option. Please try again entering a valid option.")
+        else:
+            return menu
 
 
+
+
+
+
+
+
+
+
+
+
+menu()
 
 
 
