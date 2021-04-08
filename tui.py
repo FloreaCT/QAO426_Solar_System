@@ -35,11 +35,11 @@ def menu():
     print("Main Menu \n1. Load Data \n2. Process Data\n3. Visualise Data\n4. Save Data\n5. Exit ")
 
     while True:
-        menu = int(input())
-        if menu not in range(1,6):
+        main_menu = int(input())
+        if main_menu not in range(1,6):
             print("You have entered and invalid option. Please try again entering a valid option.")
         else:
-            return menu
+            return main_menu
 
 
 def started(operation):
@@ -86,7 +86,7 @@ def error(error_msg):
     :param error_msg: A string containing an error message
     :return: Does not return anything
     """
-    # TODO: Your code here
+
 
 
 def source_data_path():
@@ -120,6 +120,14 @@ def process_type():
     :return: None if an invalid selection made otherwise an integer corresponding to a valid option
     """
     # TODO: Your code here
+    print("Process Menu\n1. Retrieve entity\n2. Retrieve entity details\n3. Categorise entities by type\n4. Categorise entities by gravity\n5. Summarise entities by orbit\n")
+
+    while True:
+        process_menu = int(input())
+        if process_menu not in range(1,6):
+            print("You have entered and invalid option. Please try again entering a valid option.")
+        else:
+            return process_menu
 
 
 def entity_name():
