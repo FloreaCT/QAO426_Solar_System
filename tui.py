@@ -139,7 +139,8 @@ def entity_name():
 
     :return: the name of an entity
     """
-    # TODO: Your code here
+    entity = input("Please enter a name for the planet")
+    return entity
 
 
 def entity_details():
