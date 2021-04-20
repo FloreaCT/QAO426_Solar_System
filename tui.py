@@ -9,14 +9,12 @@ def welcome():
     :return: Does not return anything.
     """
     # Welcome message
+
     welcome_message = "Solar Record Management System"
+
     print("-" * len(welcome_message))
     print(welcome_message)
     print("-" * len(welcome_message))
-
-# welcome()
-
-
 
 
 def menu():
@@ -36,19 +34,15 @@ def menu():
     """
     # Main menu
 
-    print("Main Menu:\n1. Load Data\n2.Process Data\n3.Visualise Data\n4.Save Data\n5.Exit")
+    print("Main Menu:\n1. Load Data\n2.Process Data\n3.Visualise Data\n4.Save Data\n5.Exit\n")
 
     option = int(input()) #Ask the user for input
 
     if option not in range(6):
         option = None
-        print("Invalid option. Please selecet a valid option from 1 to 5.")
+        print("Invalid option. Please select a valid option from 1 to 5.")
     else:
         return option
-
-
-# menu()
-
 
 
 
@@ -91,7 +85,7 @@ def error(error_msg):
     :param error_msg: A string containing an error message
     :return: Does not return anything
     """
-    # TODO: Your code here
+    print(f"Error! {error_msg}.")
 
 
 def source_data_path():
@@ -105,7 +99,16 @@ def source_data_path():
 
     :return: None if the file path does not end in 'csv' otherwise return the file path entered by the user
     """
-    # TODO: Your code here
+
+    print("Please enter the file path for the data file.\n* Do not forget to enter the file extention 'csv' *\n")
+
+    data_path = input() #Ask the user for the file path
+
+    if ".csv" in data_path:
+        return data_path
+    else:
+        print("Error! Please DO NOT forget to add the file extension '.csv' at the end")
+        return None
 
 
 def process_type():
@@ -124,7 +127,6 @@ def process_type():
 
     :return: None if an invalid selection made otherwise an integer corresponding to a valid option
     """
-    # TODO: Your code here
 
 
 def entity_name():
