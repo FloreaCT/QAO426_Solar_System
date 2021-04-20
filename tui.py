@@ -36,11 +36,12 @@ def menu():
 
     print("Main Menu:\n1. Load Data\n2.Process Data\n3.Visualise Data\n4.Save Data\n5.Exit\n")
 
-    option = int(input()) #Ask the user for input
+    main_option = int(input()) #Ask the user for input
 
-    if option not in range(6):
-        option = None
+    if main_option not in range(6):
+        main_option = None
         print("Invalid option. Please select a valid option from 1 to 5.")
+        return None
     else:
         return option
 
@@ -127,7 +128,16 @@ def process_type():
 
     :return: None if an invalid selection made otherwise an integer corresponding to a valid option
     """
+    print("Menu\n1.Retrieve entity\n2.Retrieve entity details\n3.Categorise entities by type\n4.Categorise entities by gravity\n5.Summarise entities by orbit\n")
 
+    second_option = int(input()) #Ask the user for input
+
+    if second_option not in range(6):
+        second_option = None
+        print("Invalid option. Please select a valid option from 1 to 5.")
+        return None
+    else:
+        return second_option
 
 def entity_name():
     """
