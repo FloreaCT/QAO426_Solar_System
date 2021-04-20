@@ -8,13 +8,16 @@ def welcome():
 
     :return: Does not return anything.
     """
-    message = "'Solar Record Management System'"
+    # Welcome message
+    welcome_message = "Solar Record Management System"
+    print("-" * len(welcome_message))
+    print(welcome_message)
+    print("-" * len(welcome_message))
 
-    print("'" * len(message))
-    print(message)
-    print("'" * len(message))
+# welcome()
 
-    return
+
+
 
 def menu():
     """
@@ -31,15 +34,22 @@ def menu():
 
     :return: None if invalid selection otherwise an integer corresponding to a valid selection
     """
+    # Main menu
 
-    print("Main Menu \n1. Load Data \n2. Process Data\n3. Visualise Data\n4. Save Data\n5. Exit ")
+    print("Main Menu:\n1. Load Data\n2.Process Data\n3.Visualise Data\n4.Save Data\n5.Exit")
 
-    while True:
-        main_menu = int(input())
-        if main_menu not in range(1,6):
-            print("You have entered and invalid option. Please try again entering a valid option.")
-        else:
-            return main_menu
+    option = int(input())
+
+    if option not in range(6):
+        option = None
+        print("Invalid option. Please selecet a valid option from 1 to 5.")
+    else:
+        return option
+
+
+menu()
+
+
 
 
 def started(operation):
@@ -53,10 +63,7 @@ def started(operation):
     :param operation: A string indicating the operation being started
     :return: Does not return anything
     """
-
-    print(f"{operation} has started")
-
-    return
+    # TODO: Your code here
 
 
 def completed(operation):
@@ -70,9 +77,7 @@ def completed(operation):
     :param operation: A string indicating the operation being completed
     :return: Does not return anything
     """
-    print(f"{operation} was completed")
-
-    return
+    # TODO: Your code here
 
 
 def error(error_msg):
@@ -86,7 +91,7 @@ def error(error_msg):
     :param error_msg: A string containing an error message
     :return: Does not return anything
     """
-
+    # TODO: Your code here
 
 
 def source_data_path():
@@ -120,14 +125,6 @@ def process_type():
     :return: None if an invalid selection made otherwise an integer corresponding to a valid option
     """
     # TODO: Your code here
-    print("Process Menu\n1. Retrieve entity\n2. Retrieve entity details\n3. Categorise entities by type\n4. Categorise entities by gravity\n5. Summarise entities by orbit\n")
-
-    while True:
-        process_menu = int(input())
-        if process_menu not in range(1,6):
-            print("You have entered and invalid option. Please try again entering a valid option.")
-        else:
-            return process_menu
 
 
 def entity_name():
@@ -139,8 +136,7 @@ def entity_name():
 
     :return: the name of an entity
     """
-    entity = input("Please enter a name for the planet")
-    return entity
+    # TODO: Your code here
 
 
 def entity_details():
