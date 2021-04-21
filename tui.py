@@ -281,7 +281,15 @@ def visualise():
 
     :return: None if an invalid selection is made otherwise an integer corresponding to a valid option
     """
-    # TODO: Your code here
+    print("Visualise Menu\n1.Entities by type\n2.Entities by gravity\n3.Summary of orbits\n4.Animate gravities")
+    menu = int(input())
+
+    if menu not in range(5):
+        menu = None
+        print("Invalid option. Please select a valid option from 1 to 4.")
+        return None
+    else:
+        return menu
 
 
 def save():
@@ -304,7 +312,7 @@ def save():
 
     if menu not in range(2):
         menu = None
-        print("Invalid option. Please select a valid option from.")
+        print("Invalid option. Please select a valid option.")
         return None
     else:
         return menu
