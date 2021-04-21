@@ -298,4 +298,14 @@ def save():
 
     :return: None if an invalid selection is made otherwise an integer corresponding to a valid option
     """
-    # TODO: Your code here
+    print("Menu\n1.Export as JSON\n")
+    menu = int(input())
+
+
+    if menu not in range(2):
+        menu = None
+        print("Invalid option. Please select a valid option from.")
+        return None
+    else:
+        return menu
+
