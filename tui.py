@@ -263,7 +263,14 @@ def orbits():
 
     :return: a list of entity names
     """
-    # TODO: Your code here
+    print("Please enter the name/names of the entities you would like to see. E.g Earth,Moon,Venus")
+
+    entity = input().split(",")
+
+    return entity
+
+
+
 
 
 def visualise():
