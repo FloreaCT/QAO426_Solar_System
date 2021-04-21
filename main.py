@@ -5,14 +5,12 @@ import visual
 
 # Task 18: Create an empty list named 'records'.
 # This will be used to store the date read from the source data file.
-# TODO: Your code here
+records = []
 
 
 def run():
 
-    # Task 19: Call the function welcome of the module tui.
-    # This will display our welcome message when the program is executed.
-    # TODO: Your code here
+    welcome()
 
     while True:
         # Task 20: Using the appropriate function in the module tui, display a menu of options
@@ -170,4 +168,5 @@ def run():
         # TODO: Your code here
 
 
-run()
+if __name__ == "__main__":
+    run()

@@ -43,7 +43,7 @@ def menu():
         print("Invalid option. Please select a valid option from 1 to 5.")
         return None
     else:
-        return option
+        return main_option
 
 
 
@@ -148,7 +148,7 @@ def entity_name():
 
     :return: the name of an entity
     """
-    print("Please enter the Planet's name")
+    print("Please enter the Planet's name") #Ask the user for the name of the planet
 
     planet = input()
 
@@ -165,7 +165,19 @@ def entity_details():
 
     :return: A list containing the name of an entity and a list of column indexes
     """
-    # TODO: Your code here
+    print("Please enter the name of the planet")  # Ask the user for a planet name
+    planet = input()
+    print(f"At which index of the planet {planet} we should look? Please write 00 when you are finished with index choosing")  # Ask the user for an index
+    planet_index = []
+
+    while True:
+        indexes = int(input())
+        if indexes == 00:
+            break
+        else:
+            planet_index.append(indexes)
+
+    return planet, planet_index
 
 
 def list_entity(entity, cols=[]):
