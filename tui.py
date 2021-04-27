@@ -43,13 +43,13 @@ def menu():
         print("Invalid option. Please select a valid option from 1 to 5!\n1.Load Data\n2.Process Data\n3.Visualise Data\n4.Save Data\n5.Exit\n")
         continue
       elif main_option == 1:
-        return main_option
+        source_data_path()
 
       elif main_option == 2:
-        return main_option
+        process_type()
 
       elif main_option == 3:
-        return main_option
+        visualise()
 
       elif main_option == 4:
         save()
@@ -57,9 +57,10 @@ def menu():
 
       elif main_option == 5:
         print("Hope to see you soon!")
-        return None           
+        return          
       else:
-          return main_option
+          return None
+        
 
 def started(operation):
     """
@@ -72,6 +73,7 @@ def started(operation):
     :param operation: A string indicating the operation being started
     :return: Does not return anything
     """
+    
     print(f"{operation} has started.")
 
 
@@ -179,19 +181,18 @@ def entity_details():
 
     :return: A list containing the name of an entity and a list of column indexes
     """
+    entity = []
+
     print("Please enter the name of the planet")  # Ask the user for a planet name
     planet = input()
-    print(f"At which index of the planet {planet} we should look? Please write 00 when you are finished with index choosing")  # Ask the user for an index
-    planet_index = []
+    entity.append(planet)
 
-    while True:
-        indexes = int(input())
-        if indexes == 00:
-            break
-        else:
-            planet_index.append(indexes)
-
-    return planet, planet_index
+    print(f"At which index of the planet {planet} we should look?")  # Ask the user for an index
+    index = input().split(",")
+    for i in range(0, len(index)):
+        index[i] = int(index[i])
+    entity.append(index)
+    return entity
 
 
 def list_entity(entity, cols=[]):
@@ -213,8 +214,7 @@ def list_entity(entity, cols=[]):
     """
 
     # TODO: Your code here
-    def entity_details()
-    print(list_entity)
+
 def list_entities():
     """
     Task 11: Display each entity in entities. Only the data for the specified column indexes will be displayed.
@@ -252,9 +252,9 @@ def list_categories(categories):
     :return: Does not return anything
     """
     with open('planets.csv') as csv_file:
-    csv_reader = csv.reader(csv_file)
-    for row in csv_reader:
-       print(row[0])
+        csv_reader = csv.reader(csv_file)
+        for row in csv_reader:
+            print(row[categories])
 
 
 def gravity_range():
@@ -275,9 +275,9 @@ def gravity_range():
 
     upper_gravity = float(input())
 
-    range = (lower_gravity, upper_gravity)
+    g_range = (lower_gravity, upper_gravity)
 
-    return range
+    return g_range
 
 
 def orbits():
@@ -342,13 +342,14 @@ def save():
     :return: None if an invalid selection is made otherwise an integer corresponding to a valid option
     """
     print("Menu\n1.Export as JSON\n")
-    menu = int(input())
 
+    while True:
+        menu = int(input())
+        if menu not in range(2) or menu == 0:
+            menu = None
+            print("Invalid option. Please select a valid option.\n1.Export as JSON\n")
+        else:
 
-    if menu not in range(2):
-        menu = None
-        print("Invalid option. Please select a valid option.")
-        return None
-    else:
-        return menu
+            return menu
 
+menu()
