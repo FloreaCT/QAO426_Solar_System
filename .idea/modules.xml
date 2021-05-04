@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../COM411---Problem-Solving-through-Programming/.idea/COM411---Problem-Solving-through-Programming.iml" filepath="$PROJECT_DIR$/../COM411---Problem-Solving-through-Programming/.idea/COM411---Problem-Solving-through-Programming.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/QHO426_Solar_System.iml" filepath="$PROJECT_DIR$/.idea/QHO426_Solar_System.iml" />
     </modules>
   </component>

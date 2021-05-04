@@ -1,12 +1,12 @@
-# Task 17: Import the modules csv, tui and visual
-import tui
-import visual
 import csv
+import json
+from tui import *
+from visual import *
 
 # Task 18: Create an empty list named 'records'.
 # This will be used to store the date read from the source data file.
-records = []
 
+records = []
 
 def run():
 
@@ -16,71 +16,63 @@ def run():
         # Task 20: Using the appropriate function in the module tui, display a menu of options
         # for the different operations that can be performed on the data.
         # Assign the selected option to a suitable local variable
-        # TODO: Your code here
+        main_menu = menu()
+     
+        # Task 21: Check if the user selected the option for loading data.  If so, then do the following:   
+        if main_menu == 1:
 
-        # Task 21: Check if the user selected the option for loading data.  If so, then do the following:
         # - Use the appropriate function in the module tui to display a message to indicate that the data loading
         # operation has started.
+            started("Data Loading")
+            print()
+
         # - Load the data (see below).
+
+            source_data_path()
+        
+            print()
+
         # - Use the appropriate function in the module tui to display a message to indicate that the data loading
         # operation has completed.
-        #
+            completed("Data Loading")
+            
         # To load the data, it is recommended that you create and call one or more separate functions that do the
         # following:
         # - Use the appropriate function in the module tui to retrieve a file path for the CSV data file.  You
         # should appropriately handle the case where this is None.
         # - Read each line from the CSV file and add it to the list 'records'. You should appropriately handle the case
         # where the file cannot be found
-        # TODO: Your code here
 
         # Task 22: Check if the user selected the option for processing data.  If so, then do the following:
+        elif main_menu == 2:
+
         # - Use the appropriate function in the module tui to display a message to indicate that the data processing
         # operation has started.
+            started("Data Processing")
+
         # - Process the data (see below).
+            process_type()
         # - Use the appropriate function in the module tui to display a message to indicate that the data processing
         # operation has completed.
-        #
+            completed("Data Processing")
+
         # To process the data, it is recommended that you create and call one or more separate functions that do the
         # following:
         # - Use the appropriate function in the module tui to display a menu of options for processing the data.
         # - Check what option has been selected
+  
+
         #
-        #   - If the user selected the option to retrieve an entity then
-        #       - Use the appropriate function in the module tui to indicate that the entity retrieval process
-        #       has started.
-        #       - Use the appropriate function in the module tui to retrieve the entity name
-        #       - Find the record for the specified entity in records.  You should appropriately handle the case
-        #       where the entity cannot be found.
-        #       - Use the appropriate function in the module tui to list the entity
-        #       - Use the appropriate function in the module tui to indicate that the entity retrieval process has
-        #       completed.
-        #
-        #   - If the user selected the option to retrieve an entity's details then
-        #       - Use the appropriate function in the module tui to indicate that the entity details retrieval
-        #       process has started.
-        #       - Use the appropriate function in the module tui to retrieve the entity details
-        #       - Find the record for the specified entity details in records.  You should appropriately handle the
-        #       case where the entity cannot be found.
-        #       - Use the appropriate function in the module tui to list the entity
-        #       - Use the appropriate function in the module tui to indicate that the entity details retrieval
-        #       process has completed.
-        #
-        #   - If the user selected the option to categorise entities by their type then
-        #       - Use the appropriate function in the module tui to indicate that the entity type categorisation
-        #       process has started.
-        #       - Iterate through each record in records and assemble a dictionary containing a list of planets
-        #       and a list of non-planets.
-        #       - Use the appropriate function in the module tui to list the categories.
-        #       - Use the appropriate function in the module tui to indicate that the entity type categorisation
-        #       process has completed.
-        #
-        #   - If the user selected the option to categorise entities by their gravity then
         #       - Use the appropriate function in the module tui to indicate that the categorisation by entity gravity
         #       process has started.
+
         #       - Use the appropriate function in the module tui to retrieve a gravity range
+
         #       - Iterate through each record in records and assemble a dictionary containing lists of entities
         #       grouped into low (below lower limit), medium and high (above upper limit) gravity categories.
+
         #       - Use the appropriate function in the module tui to list the categories.
+
         #       - Use the appropriate function in the module tui to indicate that the categorisation by entity gravity
         #       process has completed.
         #
@@ -93,7 +85,9 @@ def run():
         #       accessed as follows:
         #           name_of_dict[planet_orbited][category]
         #       where category is "small" if the mean radius of the entity is below 100 and "large" otherwise.
+
         #       - Use the appropriate function in the module tui to list the categories.
+        
         #       - Use the appropriate function in the module tui to indicate that the orbit summary process has
         #       completed.
         # TODO: Your code here
@@ -166,7 +160,6 @@ def run():
         # Task 30: If the user selected an invalid option then use the appropriate function of the module tui to
         # display an error message
         # TODO: Your code here
-
-
 if __name__ == "__main__":
     run()
+

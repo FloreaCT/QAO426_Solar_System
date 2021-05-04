@@ -1,3 +1,4 @@
+import csv
 def welcome():
     """
     Task 1: Display a welcome message.
@@ -15,6 +16,7 @@ def welcome():
     print("-" * len(welcome_message))
     print(welcome_message)
     print("-" * len(welcome_message))
+    print()
 
 
 def menu():
@@ -38,18 +40,18 @@ def menu():
 
     while True:
       main_option = int(input()) #Ask the user for input
-      if main_option not in range(6) or main_option == 0:
-        main_option = None
-        print("Invalid option. Please select a valid option from 1 to 5!\n1.Load Data\n2.Process Data\n3.Visualise Data\n4.Save Data\n5.Exit\n")
-        continue
+      if main_option not in range(1,6):
+         main_option = None
+         print("Invalid option. Please select a valid option from 1 to 5!\n1.Load Data\n2.Process Data\n3.Visualise Data\n4.Save Data\n5.Exit\n")
+         continue
       elif main_option == 1:
-        source_data_path()
-
+        return main_option
+        
       elif main_option == 2:
-        process_type()
+        return main_option
 
       elif main_option == 3:
-        visualise()
+        return main_option
 
       elif main_option == 4:
         save()
@@ -74,7 +76,7 @@ def started(operation):
     :return: Does not return anything
     """
     
-    print(f"{operation} has started.")
+    print(f"\n{operation} has started.\n")
 
 
 def completed(operation):
@@ -88,7 +90,7 @@ def completed(operation):
     :param operation: A string indicating the operation being completed
     :return: Does not return anything
     """
-    print(f"{operation} has completed.")
+    print(f"\n{operation} has completed.\n")
 
 
 def error(error_msg):
@@ -118,15 +120,20 @@ def source_data_path():
     """
 
     print("Please enter the file path for the data file.\n* Do not forget to enter the file extention 'csv' *\n")
-
-    data_path = input() #Ask the user for the file path
-
-    if ".csv" in data_path:
-        return data_path
-    else:
-        print("Error! Please DO NOT forget to add the file extension '.csv' at the end")
-        return None
-
+    while True:
+        global records
+        data_path =input()#Ask the user for the file path
+    
+        if ".csv" in data_path:
+            with open(data_path) as csvfile:
+                csv_reader = csv.reader(csvfile)
+                records = list(csv_reader)
+            return data_path
+        else:
+            print("Error! Please DO NOT forget to add the file extension '.csv' at the end\n")
+            print("Please enter data path: ") 
+        
+            
 
 def process_type():
     """
@@ -145,17 +152,39 @@ def process_type():
     :return: None if an invalid selection made otherwise an integer corresponding to a valid option
     """
     print("Menu\n1.Retrieve entity\n2.Retrieve entity details\n3.Categorise entities by type\n4.Categorise entities by gravity\n5.Summarise entities by orbit\n")
+   
+    while True:
+        second_option = int(input()) #Ask the user for input
 
-    second_option = int(input()) #Ask the user for input
+        if second_option not in range(6):
+            second_option = None
+            print("Invalid option. Please select a valid option from 1 to 5.")
+            return None
+        elif second_option == 1:
+            started("Entity retrieval process")
+            entity_name()
+            completed("Entity retrieval process")
+            print("Menu\n1.Retrieve entity\n2.Retrieve entity details\n3.Categorise entities by type\n4.Categorise entities by gravity\n5.Summarise entities by orbit\n")
 
-    if second_option not in range(6):
-        second_option = None
-        print("Invalid option. Please select a valid option from 1 to 5.")
-        return None
-    else:
-        return second_option
+        elif second_option == 2:
+            started("Entity details process")
+            list_entity(entity_details())
+            completed("Entity details process")
+        elif second_option == 3:
+            started("Categorise entities by type")
+            list_categories(0)
+            completed("Categorise entities by type")
+        elif second_option == 4:
+            started("Categorise entities by gravity")
+            list_categories(gravity_range())
+            completed("Categorise entities by gravity")
+        elif second_option == 5:
+            started("Summarise entities by orbit")
+            list_categories(1)
+            completed("Summarise entities by orbit")
 
 def entity_name():
+    
     """
     Task 8: Read in the name of an entity and return the name.
 
@@ -164,11 +193,28 @@ def entity_name():
 
     :return: the name of an entity
     """
-    print("Please enter the Planet's name") #Ask the user for the name of the planet
+    print("Please enter the Planet's name:") #Ask the user for the name of the planet
 
-    planet = input()
+    planet_name = input().capitalize()
 
-    return planet
+    planet_list = records
+    while True:
+        for item in planet_list:
+            if planet_name in item[0:1]:
+                planet_list = item[:]
+                print(f"\n{planet_name} has been retrieved.")
+                return planet_name 
+        for item in planet_list:
+            if planet_name not in item[0:1]:
+                planet_list = item[:]
+                print(f"\n{planet_name} is not in the database")
+            return None 
+
+
+             
+
+
+        
 
 def entity_details():
     """
@@ -181,19 +227,28 @@ def entity_details():
 
     :return: A list containing the name of an entity and a list of column indexes
     """
-    entity = []
 
-    print("Please enter the name of the planet")  # Ask the user for a planet name
-    planet = input()
-    entity.append(planet)
+    print("\nPlease enter the name of the planet")  # Ask the user for a planet name
 
-    print(f"At which index of the planet {planet} we should look?")  # Ask the user for an index
-    index = input().split(",")
-    for i in range(0, len(index)):
-        index[i] = int(index[i])
-    entity.append(index)
-    return entity
+    entity = input().capitalize() 
 
+    print(f"\nAt which index of the planet we should look?")  # Ask the user for an index
+    
+    cols = []
+    col_nr = input()
+    if len(col_nr) > 0:
+        index = col_nr.split(",")
+        print("")
+        for i in range(0, len(index)):
+          index[i] = int(index[i])
+        cols.append(index)
+        return (entity), (cols)
+    else:
+        cols = []
+        return (entity), (cols)
+
+
+  
 
 def list_entity(entity, cols=[]):
     """
@@ -212,10 +267,32 @@ def list_entity(entity, cols=[]):
     :param cols: A list of integer values that represent column indexes
     :return: does not return anything
     """
+    given_list = records
+    if entity[1] != []:
+        for item in given_list:
+            if entity[0] in item[0:1]:
+                given_list = item[:]
 
-    # TODO: Your code here
+        index_list = entity[1]
+        lisa = []
 
-def list_entities():
+        for item in index_list:
+            for i in item:
+                lisa.append(given_list[i])
+        
+        print(f"Showing indexes for entity {entity[0]}:")
+        print(lisa)
+    else:
+        for item in given_list:
+            if entity[0] in item[0:1]:
+                given_list = item[:]
+                
+        print(f"Showing all the indexes for entity {entity[0]}:")
+        print(given_list)
+
+
+def list_entities(entities, cols=[]):
+    
     """
     Task 11: Display each entity in entities. Only the data for the specified column indexes will be displayed.
     If no column indexes have been specified, then all the data for an entity will be displayed.
@@ -251,11 +328,23 @@ def list_categories(categories):
     :param categories: A dictionary containing category names and a list of entities that are part of that category
     :return: Does not return anything
     """
-    with open('planets.csv') as csv_file:
-        csv_reader = csv.reader(csv_file)
-        for row in csv_reader:
-            print(row[categories])
+    if categories == 0:
+        planet_list = []
+        not_planet_list = []
+        dictionary = {}
+        for items in records[1:]:
+            if items[1] == "TRUE":
+                planet_list.append(items[0])
+            else:
+                not_planet_list.append(items[0])
+        dictionary = {"Planets": planet_list, "Not planets:": not_planet_list}
+        print(dictionary)
 
+    elif categories == 1:
+        print("A tuple")
+    else:
+        print("BUhahahah")
+        
 
 def gravity_range():
     """
@@ -293,7 +382,7 @@ def orbits():
     """
     print("Please enter the name/names of the entities you would like to see. e.g Earth,Moon,Venus")
 
-    entity = input().split(",")
+    entity = list(input().split(","))
 
     return entity
 
@@ -349,7 +438,10 @@ def save():
             menu = None
             print("Invalid option. Please select a valid option.\n1.Export as JSON\n")
         else:
+            print("Please select the output name: ")
+            name = input() + ".json"
+            with open(name, 'w') as f:
+             json.dump(list_categories(categories), f)
 
-            return menu
 
-menu()
+
