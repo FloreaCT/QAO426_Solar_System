@@ -45,7 +45,7 @@ def menu():
          continue
       elif main_option == 1:
         return main_option
-        
+
       elif main_option == 2:
         return main_option
 
@@ -58,10 +58,10 @@ def menu():
 
       elif main_option == 5:
         print("Hope to see you soon!")
-        return          
+        return
       else:
           return None
-        
+
 
 def started(operation):
     """
@@ -74,7 +74,7 @@ def started(operation):
     :param operation: A string indicating the operation being started
     :return: Does not return anything
     """
-    
+
     print(f"\n{operation} has started.\n")
 
 
@@ -147,7 +147,7 @@ def process_type():
 
     #Process data menu
 
-    print("Menu\n1.Retrieve entity\n2.Retrieve entity details\n3.Categorise entities by type\n4.Categorise entities by gravity\n5.Summarise entities by orbit\n")    
+    print("Menu\n1.Retrieve entity\n2.Retrieve entity details\n3.Categorise entities by type\n4.Categorise entities by gravity\n5.Summarise entities by orbit\n")
 
 
     menu = int(input()) #Ask the user for input
@@ -159,7 +159,7 @@ def process_type():
 
 
 def entity_name():
-    
+
     """
     Task 8: Read in the name of an entity and return the name.
 
@@ -188,15 +188,15 @@ def entity_details():
 
     print("\nPlease enter the name of the planet")  # Ask the user for a planet name
 
-    entity = input().capitalize() 
+    entity = input().capitalize()
 
     print(f"\nAt which index of the planet we should look?")  # Ask the user for an index
-    
+
     planet_index =  int(input())
 
     return (entity),(planet_index)
 
-  
+
 
 def list_entity(entity, cols=[]):
     """
@@ -229,20 +229,20 @@ def list_entity(entity, cols=[]):
         for item in index_list:
             for i in item:
                 lista.append(given_list[i])
-        
+
         print(f"Showing indexes for entity {entity[0]}:")
         print(lista)
     else:
         for item in given_list:
             if entity[0] in item[0:1]:
                 given_list = item[:]
-                
+
         print(f"Showing all the indexes for entity {entity[0]}:")
         print(given_list)
 
 
 def list_entities(entities, cols=[]):
-    
+
     """
     Task 11: Display each entity in entities. Only the data for the specified column indexes will be displayed.
     If no column indexes have been specified, then all the data for an entity will be displayed.
@@ -375,3 +375,17 @@ def save():
     else:
         return menu
 
+#Added the next extra functions as instructed.
+
+def planet_list(path):
+
+    #This functions is taking one argument and adds data from a CSV file to a dictionary
+
+    if path.endswith(".csv"):
+        with open(path) as csvfile:
+            csv_reader = csv.reader(csvfile)
+            planets = list(csv_reader)
+        return path
+    else:
+        error(path)
+        return None

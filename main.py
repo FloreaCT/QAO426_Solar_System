@@ -7,7 +7,7 @@ from visual import *
 # Task 18: Create an empty list named 'records'.
 # This will be used to store the date read from the source data file.
 
-records = []
+records = [] #Defining the list with all the planets
 
 def run():
 
@@ -18,31 +18,27 @@ def run():
         # for the different operations that can be performed on the data.
         # Assign the selected option to a suitable local variable
         main_menu = menu()
-     
-        # Task 21: Check if the user selected the option for loading data.  If so, then do the following:   
-        if main_menu == 1:
 
+        # Task 21: Check if the user selected the option for loading data.  If so, then do the following:
         # - Use the appropriate function in the module tui to display a message to indicate that the data loading
         # operation has started.
-            started("Data Loading")
-            print()
-
         # - Load the data (see below).
-
-            source_data_path()
-        
-            print()
-
         # - Use the appropriate function in the module tui to display a message to indicate that the data loading
         # operation has completed.
-            completed("Data Loading")
-            
+        #
         # To load the data, it is recommended that you create and call one or more separate functions that do the
         # following:
         # - Use the appropriate function in the module tui to retrieve a file path for the CSV data file.  You
         # should appropriately handle the case where this is None.
         # - Read each line from the CSV file and add it to the list 'records'. You should appropriately handle the case
         # where the file cannot be found
+        # TODO: Your code here
+        if main_menu == 1:
+
+            started("Data Loading\n")
+            records.append(records(source_data_path()))
+            print()
+            completed("Data Loading\n")
 
         # Task 22: Check if the user selected the option for processing data.  If so, then do the following:
         elif main_menu == 2:
