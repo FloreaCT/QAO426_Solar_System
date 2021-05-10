@@ -15,10 +15,7 @@ def welcome():
 
     welcome_message = "Solar Record Management System"
 
-    print("-" * len(welcome_message))
-    print(welcome_message)
-    print("-" * len(welcome_message))
-    print()
+    print("-" * len(welcome_message) + "\n" + welcome_message + "\n" + "-" * len(welcome_message))
 
 
 def menu():
