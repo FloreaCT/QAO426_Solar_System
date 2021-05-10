@@ -318,12 +318,9 @@ def orbits():
     """
     print("Please enter the names of the entities you would like to see. e.g Earth,Moon,Venus")
 
-    entity = list(input().split(","))
+    entities_name = list(input().split(","))
 
-    return entity
-
-
-
+    return entities_name
 
 
 def visualise():
