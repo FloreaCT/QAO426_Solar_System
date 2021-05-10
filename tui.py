@@ -192,19 +192,9 @@ def entity_details():
 
     print(f"\nAt which index of the planet we should look?")  # Ask the user for an index
     
-    cols = []
-    col_nr = input()
-    if len(col_nr) > 0:
-        index = col_nr.split(",")
-        print("")
-        for i in range(0, len(index)):
-          index[i] = int(index[i])
-        cols.append(index)
-        return (entity), (cols)
-    else:
-        cols = []
-        return (entity), (cols)
+    planet_index =  int(input())
 
+    return (entity),(planet_index)
 
   
 
