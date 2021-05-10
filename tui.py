@@ -215,7 +215,9 @@ def list_entity(entity, cols=[]):
     :param cols: A list of integer values that represent column indexes
     :return: does not return anything
     """
+
     given_list = records
+
     if entity[1] != []:
         for item in given_list:
             if entity[0] in item[0:1]:
@@ -276,75 +278,8 @@ def list_categories(categories):
     :param categories: A dictionary containing category names and a list of entities that are part of that category
     :return: Does not return anything
     """
-
-
-    if categories == 0: #Categorising planets and not planets
-
-        planet_list = []
-        not_planet_list = []
-        dictionary = {}
-        for items in records[1:]:
-            if items[1] == "TRUE":
-                planet_list.append(items[0])
-            else:
-                not_planet_list.append(items[0])
-        dictionary = {"Planets": planet_list, "Not planets": not_planet_list}
-        print(dictionary)
-
-        return dictionary
-
-    elif categories == 1:#Used for orbit summary
-        global orbit_summary
-        orbit_summary = {}
-        planet_dict = {}
-
-        for items in records[1:]:
-            if items[21] == "NA":
-                continue
-            else:
-                if float(items[10]) < 100:
-                    name = str(items[0]) # This is the orbiting entity
-                    items[0] = {}
-                    items[0].update({items[21]: "Small"})
-                    planet_dict = {name: items[0]} #Sub dictionary
-                    orbit_summary.update(planet_dict) #Main dictionary
-                else:
-                    name = str(items[0])
-                    items[0] = {}
-                    items[0].update({items[21]: "Large"})
-                    planet_dict = {name: items[0]}
-                    orbit_summary.update(planet_dict)
-        print(orbit_summary)
-        print("")
-        return orbit_summary
-    else: #Used for Gravity Range
-        global g_dictionary
-
-        lower_limit = []
-        upper_limit = []
-        medium_limit = []
-        g_dictionary = {}
-
-        for items in records[1:]:
-            if float(items[8]) <= categories[0]:
-                lower_limit.append(items[0])
-            elif float(items[8]) >= categories[1]:
-                upper_limit.append(items[0])
-            else:
-                if float(items[8]) >= categories[0] and float(items[8]) <= categories[1]:
-                    medium_limit.append(items[0])
-        g_dictionary["Lower"] = lower_limit
-        g_dictionary["Medium"] = medium_limit
-        g_dictionary["Upper"] = upper_limit
-        # print("THIS ARE THE UPPER LIMITS\n",upper_limit)
-        # print("")
-        # print("")
-        # print("THIS ARE THE LOWER LIMITS\n",lower_limit)
-        # print("")
-        # print("")
-        # print("THIS ARE THE MEDIUM LIMITS\n",medium_limit)
-        print(g_dictionary)
-        return g_dictionary
+    for key, value in categories.items():
+        print(key + "\n" * 2 + str(value))
 
 
 def gravity_range():
