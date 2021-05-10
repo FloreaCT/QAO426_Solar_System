@@ -124,10 +124,9 @@ def source_data_path():
         if data_path.endswith(".csv"):
             return data_path
         else:
-            print("Error! Please DO NOT forget to add the file extension '.csv' at the end\n")
-            print("Please enter data path: ") 
+            error(data_path)
+            return None
 
-            
 
 def process_type():
     """
@@ -145,40 +144,19 @@ def process_type():
 
     :return: None if an invalid selection made otherwise an integer corresponding to a valid option
     """
+
+    #Process data menu
+
     print("Menu\n1.Retrieve entity\n2.Retrieve entity details\n3.Categorise entities by type\n4.Categorise entities by gravity\n5.Summarise entities by orbit\n")    
-    while True:
 
-        second_option = int(input()) #Ask the user for input
 
-        if second_option not in range(6):
-            second_option = None
-            print("Invalid option. Please select a valid option from 1 to 5.")
-            return None
-        elif second_option == 1:
-            started("Entity retrieval process")
-            entity_name()
-            completed("Entity retrieval process")
-            return second_option
-        elif second_option == 2:
-            started("Entity details process")
-            list_entity(entity_details())
-            completed("Entity details process")
-            return second_option
-        elif second_option == 3:
-            started("Categorise entities by type")
-            list_categories(0)
-            completed("Categorise entities by type")
-            return second_option
-        elif second_option == 4:
-            started("Categorise entities by gravity")
-            list_categories(gravity_range())
-            completed("Categorise entities by gravity")
-            return second_option
-        elif second_option == 5:
-            started("Summarise entities by orbit")
-            list_categories(1)
-            completed("Summarise entities by orbit")
-            return second_option
+    menu = int(input()) #Ask the user for input
+
+    if menu in range(1,6):
+        return menu
+    else:
+        error(menu)
+
 
 def entity_name():
     
