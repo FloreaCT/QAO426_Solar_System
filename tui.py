@@ -338,34 +338,16 @@ def visualise():
 
     :return: None if an invalid selection is made otherwise an integer corresponding to a valid option
     """
-    print("Visualise Menu\n1.Entities by type\n2.Entities by gravity\n3.Summary of orbits\n4.Animate gravities")
-    menu = int(input())
+    #Visualise Menu
 
-    if menu not in range(5):
-        menu = None
-        print("Invalid option. Please select a valid option from 1 to 4.")
+    print("Visualise Menu\n1.Entities by type\n2.Entities by gravity\n3.Summary of orbits\n4.Animate gravities")
+
+    menu = int(input()) #Ask user for the input
+
+    if menu not in range(1,5):
+        error(menu)
         return None
-    elif menu == 1:
-        started("Entities by type process")
-        entities_pie(list_categories(0))
-        completed("Entities by type process")
-        return menu
-    elif menu == 2:
-        started("Entities by gravity process")
-        entities_bar(g_dictionary)
-        completed("Entities by gravity process")
-        return menu
-    elif menu == 3:
-        started("Summary of orbits process")
-        orbits(orbit_summary)
-        completed("Summary of orbits process")
-        return menu
-    elif menu == 4:
-        started("Animating gravities process")
-        gravity_animation(g_dictionary)
-        completed("Animating gravities process")
-        return menu
-    # else:
+    else:
         return menu
 
 
@@ -385,16 +367,11 @@ def save():
     """
     print("Menu\n1.Export as JSON\n")
 
-    while True:
-        menu = int(input())
-        if menu not in range(2) or menu == 0:
-            menu = None
-            print("Invalid option. Please select a valid option.\n1.Export as JSON\n")
-        else:
-            print("Please select the output name: ")
-            name = input() + ".json"
-            with open(name, 'w') as f:
-             json.dump(list_categories(categories), f)
+    menu = int(input())
 
-
+    if menu not in range(1,2):
+        error(menu)
+        return None
+    else:
+        return menu
 
