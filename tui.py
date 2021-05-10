@@ -120,18 +120,13 @@ def source_data_path():
 
     print("Please enter the file path for the data file.\n* Do not forget to enter the file extention 'csv' *\n")
     while True:
-        global records
-        data_path =input()#Ask the user for the file path
-    
+        data_path =input() #Ask the user for the file path
         if data_path.endswith(".csv"):
-            with open(data_path) as csvfile:
-                csv_reader = csv.reader(csvfile)
-                records = list(csv_reader)
             return data_path
         else:
             print("Error! Please DO NOT forget to add the file extension '.csv' at the end\n")
             print("Please enter data path: ") 
-        
+
             
 
 def process_type():
