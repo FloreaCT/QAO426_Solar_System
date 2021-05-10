@@ -168,23 +168,11 @@ def entity_name():
 
     :return: the name of an entity
     """
-    print("Please enter the Planet's name:") #Ask the user for the name of the planet
+    print("Please enter the Planet's name:") #Ask user for the planet name
 
     planet_name = input().capitalize()
 
-    planet_list = records
-    while True:
-        for item in planet_list:
-            if planet_name in item[0:1]:
-                planet_list = item[:]
-                print(f"\n{planet_name} has been retrieved.")
-                return planet_name 
-        for item in planet_list:
-            if planet_name not in item[0:1]:
-                planet_list = item[:]
-                print(f"\n{planet_name} is not in the database")
-            return None 
-
+    return planet_name
 
 def entity_details():
     """
