@@ -1,4 +1,6 @@
 import csv
+from visual import *
+
 def welcome():
     """
     Task 1: Display a welcome message.
@@ -124,7 +126,7 @@ def source_data_path():
         global records
         data_path =input()#Ask the user for the file path
     
-        if ".csv" in data_path:
+        if data_path.endswith(".csv"):
             with open(data_path) as csvfile:
                 csv_reader = csv.reader(csvfile)
                 records = list(csv_reader)
@@ -151,9 +153,9 @@ def process_type():
 
     :return: None if an invalid selection made otherwise an integer corresponding to a valid option
     """
-    print("Menu\n1.Retrieve entity\n2.Retrieve entity details\n3.Categorise entities by type\n4.Categorise entities by gravity\n5.Summarise entities by orbit\n")
-   
+    print("Menu\n1.Retrieve entity\n2.Retrieve entity details\n3.Categorise entities by type\n4.Categorise entities by gravity\n5.Summarise entities by orbit\n")    
     while True:
+
         second_option = int(input()) #Ask the user for input
 
         if second_option not in range(6):
@@ -164,24 +166,27 @@ def process_type():
             started("Entity retrieval process")
             entity_name()
             completed("Entity retrieval process")
-            print("Menu\n1.Retrieve entity\n2.Retrieve entity details\n3.Categorise entities by type\n4.Categorise entities by gravity\n5.Summarise entities by orbit\n")
-
+            return second_option
         elif second_option == 2:
             started("Entity details process")
             list_entity(entity_details())
             completed("Entity details process")
+            return second_option
         elif second_option == 3:
             started("Categorise entities by type")
             list_categories(0)
             completed("Categorise entities by type")
+            return second_option
         elif second_option == 4:
             started("Categorise entities by gravity")
             list_categories(gravity_range())
             completed("Categorise entities by gravity")
+            return second_option
         elif second_option == 5:
             started("Summarise entities by orbit")
             list_categories(1)
             completed("Summarise entities by orbit")
+            return second_option
 
 def entity_name():
     
@@ -210,11 +215,6 @@ def entity_name():
                 print(f"\n{planet_name} is not in the database")
             return None 
 
-
-             
-
-
-        
 
 def entity_details():
     """
@@ -274,14 +274,14 @@ def list_entity(entity, cols=[]):
                 given_list = item[:]
 
         index_list = entity[1]
-        lisa = []
+        lista = []
 
         for item in index_list:
             for i in item:
-                lisa.append(given_list[i])
+                lista.append(given_list[i])
         
         print(f"Showing indexes for entity {entity[0]}:")
-        print(lisa)
+        print(lista)
     else:
         for item in given_list:
             if entity[0] in item[0:1]:
@@ -328,7 +328,10 @@ def list_categories(categories):
     :param categories: A dictionary containing category names and a list of entities that are part of that category
     :return: Does not return anything
     """
-    if categories == 0:
+
+
+    if categories == 0: #Categorising planets and not planets
+
         planet_list = []
         not_planet_list = []
         dictionary = {}
@@ -337,14 +340,64 @@ def list_categories(categories):
                 planet_list.append(items[0])
             else:
                 not_planet_list.append(items[0])
-        dictionary = {"Planets": planet_list, "Not planets:": not_planet_list}
+        dictionary = {"Planets": planet_list, "Not planets": not_planet_list}
         print(dictionary)
 
-    elif categories == 1:
-        print("A tuple")
-    else:
-        print("BUhahahah")
-        
+        return dictionary
+
+    elif categories == 1:#Used for orbit summary
+        global orbit_summary
+        orbit_summary = {}
+        planet_dict = {}
+
+        for items in records[1:]:
+            if items[21] == "NA":
+                continue
+            else:
+                if float(items[10]) < 100:
+                    name = str(items[0]) # This is the orbiting entity
+                    items[0] = {}
+                    items[0].update({items[21]: "Small"})
+                    planet_dict = {name: items[0]} #Sub dictionary
+                    orbit_summary.update(planet_dict) #Main dictionary
+                else:
+                    name = str(items[0])
+                    items[0] = {}
+                    items[0].update({items[21]: "Large"})
+                    planet_dict = {name: items[0]}
+                    orbit_summary.update(planet_dict)
+        print(orbit_summary)
+        print("")
+        return orbit_summary
+    else: #Used for Gravity Range
+        global g_dictionary
+
+        lower_limit = []
+        upper_limit = []
+        medium_limit = []
+        g_dictionary = {}
+
+        for items in records[1:]:
+            if float(items[8]) <= categories[0]:
+                lower_limit.append(items[0])
+            elif float(items[8]) >= categories[1]:
+                upper_limit.append(items[0])
+            else:
+                if float(items[8]) >= categories[0] and float(items[8]) <= categories[1]:
+                    medium_limit.append(items[0])
+        g_dictionary["Lower"] = lower_limit
+        g_dictionary["Medium"] = medium_limit
+        g_dictionary["Upper"] = upper_limit
+        # print("THIS ARE THE UPPER LIMITS\n",upper_limit)
+        # print("")
+        # print("")
+        # print("THIS ARE THE LOWER LIMITS\n",lower_limit)
+        # print("")
+        # print("")
+        # print("THIS ARE THE MEDIUM LIMITS\n",medium_limit)
+        print(g_dictionary)
+        return g_dictionary
+
 
 def gravity_range():
     """
@@ -380,7 +433,7 @@ def orbits():
 
     :return: a list of entity names
     """
-    print("Please enter the name/names of the entities you would like to see. e.g Earth,Moon,Venus")
+    print("Please enter the names of the entities you would like to see. e.g Earth,Moon,Venus")
 
     entity = list(input().split(","))
 
@@ -412,7 +465,27 @@ def visualise():
         menu = None
         print("Invalid option. Please select a valid option from 1 to 4.")
         return None
-    else:
+    elif menu == 1:
+        started("Entities by type process")
+        entities_pie(list_categories(0))
+        completed("Entities by type process")
+        return menu
+    elif menu == 2:
+        started("Entities by gravity process")
+        entities_bar(g_dictionary)
+        completed("Entities by gravity process")
+        return menu
+    elif menu == 3:
+        started("Summary of orbits process")
+        orbits(orbit_summary)
+        completed("Summary of orbits process")
+        return menu
+    elif menu == 4:
+        started("Animating gravities process")
+        gravity_animation(g_dictionary)
+        completed("Animating gravities process")
+        return menu
+    # else:
         return menu
 
 
