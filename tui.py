@@ -1,5 +1,7 @@
 import csv
-from visual import *
+import os
+
+from main import *
 
 def welcome():
     """
@@ -60,7 +62,7 @@ def menu():
         print("Hope to see you soon!")
         return
       else:
-          return None
+        return None
 
 
 def started(operation):
@@ -103,7 +105,7 @@ def error(error_msg):
     :param error_msg: A string containing an error message
     :return: Does not return anything
     """
-    print(f"Error! {error_msg}.")
+    print(f"Error! {error_msg} is not a valid option")
 
 
 def source_data_path():
@@ -118,14 +120,13 @@ def source_data_path():
     :return: None if the file path does not end in 'csv' otherwise return the file path entered by the user
     """
 
-    print("Please enter the file path for the data file.\n* Do not forget to enter the file extention 'csv' *\n")
-    while True:
-        data_path =input() #Ask the user for the file path
-        if data_path.endswith(".csv"):
-            return data_path
-        else:
-            error(data_path)
-            return None
+    data_path =input("Please enter the file path for the data file.\n* Do not forget to enter the file extention 'csv' *\n") #Ask the user for the file path
+
+    if data_path.endswith(".csv"):
+        return data_path
+    else:
+        error(data_path)
+        return None
 
 
 def process_type():
@@ -156,6 +157,7 @@ def process_type():
         return menu
     else:
         error(menu)
+        return None
 
 
 def entity_name():
@@ -192,13 +194,24 @@ def entity_details():
 
     print(f"\nAt which index of the planet we should look?")  # Ask the user for an index
 
-    planet_index =  int(input())
+    cols = []  # Defining the index list
 
-    return (entity),(planet_index)
+    col_nr = input()
 
+    if len(col_nr) > 0:
+        index = col_nr.split(",")
+        print("")
+        for i in range(0, len(index)):
+            index[i] = int(index[i])
+        cols.append(index)
+        return entity, cols
+    else:
+        cols = []
+        return entity, cols
 
 
 def list_entity(entity, cols=[]):
+    global given_list
     """
     Task 10: Display an entity. Only the data for the specified column indexes will be displayed.
     If no column indexes have been specified, then all the data for the entity will be displayed.
@@ -216,7 +229,6 @@ def list_entity(entity, cols=[]):
     :return: does not return anything
     """
 
-    given_list = records
 
     if entity[1] != []:
         for item in given_list:
@@ -224,19 +236,18 @@ def list_entity(entity, cols=[]):
                 given_list = item[:]
 
         index_list = entity[1]
-        lista = []
+        lisa = []
 
         for item in index_list:
             for i in item:
-                lista.append(given_list[i])
+                lisa.append(given_list[i])
 
         print(f"Showing indexes for entity {entity[0]}:")
-        print(lista)
+        print(lisa)
     else:
         for item in given_list:
             if entity[0] in item[0:1]:
                 given_list = item[:]
-
         print(f"Showing all the indexes for entity {entity[0]}:")
         print(given_list)
 
@@ -279,10 +290,11 @@ def list_categories(categories):
     :return: Does not return anything
     """
     for key, value in categories.items():
-        print(key + "\n" * 2 + str(value))
+        print("\n" + key,"\n" + "\n",value)
 
 
 def gravity_range():
+
     """
     Task 13: Ask the user for the lower and upper limits for gravity and return a tuple containing the limits.
 
@@ -378,14 +390,40 @@ def save():
 #Added the next extra functions as instructed.
 
 def planet_list(path):
+    global given_list
+    #This functions is taking one argument and adds data from a CSV file to a variable
 
-    #This functions is taking one argument and adds data from a CSV file to a dictionary
-
-    if path.endswith(".csv"):
-        with open(path) as csvfile:
-            csv_reader = csv.reader(csvfile)
-            planets = list(csv_reader)
+    if path == None:
+        path = print("Wrong file path.")
         return path
     else:
-        error(path)
-        return None
+        os_path = path
+        with open(os.path.join(os.path.dirname(__file__), path), "r") as csvfile:
+            csv_reader = csv.reader(csvfile)
+            planets = list(csv_reader)
+            given_list = planets
+
+        return planets
+
+
+def g_range(categories):
+
+    lower_limit = []
+    upper_limit = []
+    medium_limit = []
+    g_dictionary = {}
+
+    for items in given_list[1:]:  # Starting iteration excluding titles
+
+        if float(items[8]) <= categories[0]:
+            lower_limit.append(items[0])
+        elif float(items[8]) >= categories[1]:
+            upper_limit.append(items[0])
+        else:
+            if float(items[8]) >= categories[0] and float(items[8]) <= categories[1]:
+                medium_limit.append(items[0])
+        g_dictionary["Lower limits"] = lower_limit
+        g_dictionary["Medium limits"] = medium_limit
+        g_dictionary["Upper limits"] = upper_limit
+
+    return g_dictionary
