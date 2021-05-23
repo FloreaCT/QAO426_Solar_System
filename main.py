@@ -2,25 +2,25 @@ import csv
 import json
 from tui import *
 from visual import *
-
 records = []
+
 # Task 18: Create an empty list named 'records'.
 # This will be used to store the date read from the source data file.
 
 def run():
-    try:
-        global records
+    # try:
 
+        global records
         welcome()
 
         def check_list(check):  # Added function to check if the entity exist in the list
 
             for item in records:
                 if check == item[0]:
-                    print(check, "has been retrieved.")
+                    print('\n' + check, "has been retrieved.")
                     return check
 
-            print(check , "is not in the database.")
+            print(check, "is not in the database.")
             return None
 
         while True:
@@ -102,10 +102,10 @@ def run():
                 #       - Use the appropriate function in the module tui to indicate that the categorisation by entity gravity
                 #       process has completed.
                 #
-        #   - If the user selected the option to generate an orbit summary then
-        #       - Use the appropriate function in the module tui to indicate that the orbit summary process has
-        #       started.
-        #       - Use the appropriate function in the module tui to retrieve a list of orbited planets.
+                #   - If the user selected the option to generate an orbit summary then
+                #       - Use the appropriate function in the module tui to indicate that the orbit summary process has
+                #       started.
+                #       - Use the appropriate function in the module tui to retrieve a list of orbited planets.
         #       - Iterate through each record in records and find entities that orbit a planet in the list of
         #       orbited planets.  Assemble the found entities into a nested dictionary such that each entity can be
         #       accessed as follows:
@@ -147,7 +147,6 @@ def run():
                                   "Not planets": not_planet_list}  # The dictionary of Planets and Not Planets
 
                     list_categories(dictionary)
-
                     completed("Categorisation process")
 
                 elif second_menu == 4:
@@ -155,9 +154,68 @@ def run():
                     list_categories(g_range(gravity_range()))
                     completed("Categorisation by entity gravity process")
 
+                elif second_menu == 5:
+                    started("Orbit summary process")
+                    orbit_summary = {}
+                    orbit_summary2 = {}
+                    planet_dict = {}
+                    plist = set()
+                    smalllist = []
+                    biglist = []
+                    rec = records.copy()
+                    del rec[0]
+                    rec.sort(key=lambda x: x[21])
+
+                    for items in rec:
+                        if items[21] == "NA":
+                            continue
+                        else:
+                            if items[21] in plist:
+                                continue
+                            else:
+                                plist.add(items[21])
+                    for items in rec:
+                        if float(items[10]) < 100:
+                            if items[21] in orbit_summary:
+                                smalllist.append(items[0])
+                            else:
+                                smalllist = []
+                                for item in plist:
+                                    if item == items[21]:
+                                        smalllist.append(items[0])
+                                        planet_dict = {'Small': smalllist}
+                                        orbit_summary.update({items[21]: planet_dict})
+                        else:
+                            if items[21] == "NA":  # Disgarding non oribiting entities
+                                continue
+                            else:
+                                if float(items[10]) > 100:
+                                    if items[21] in orbit_summary2:
+                                        biglist.append(items[0])
+                                    else:
+                                        biglist = []
+                                        for item in plist:
+                                            if item == items[21]:
+                                                biglist.append(items[0])
+                                                planet_dict.update({'Large': biglist})
+                                                orbit_summary2.update({items[21]: planet_dict})
+
+                    list_categories(orbit_summary)
+
+                    completed(("Orbit summary process"))
             elif main_menu == 3:
+                visual_menu = visualise()
                 started("Visualising data")
-                visualise()
+
+                if visual_menu == 1:
+
+                    entities_pie(dictionary)
+
+                if visual_menu == 2:
+                    from tui import atb
+                    entities_bar(atb)
+
+
                 completed("Visulaising data")
 
 
@@ -184,14 +242,22 @@ def run():
             # TODO: Your code here
             else:
                 error(main_menu)
-    except Exception:
-        import sys
-        fatal = str(sys.exc_info()[1]).split()
-        error(fatal[-1])
-
-
-    finally:
-        run()
+    # except Exception:
+    #     import sys
+    #     fatal = str(sys.exc_info()[1]).split()
+    #
+    #     if fatal[-1] == 'assignment':
+    #         print("Error! Please load data before trying to visualise data. If you loaded the data, then please process data afterwards.")
+    #     elif fatal[-1] == 'subscriptable':
+    #         print("Error! Please load data before trying to process data.")
+    #     elif fatal[-1] == 'defined':
+    #         print("Error! Please load data before trying to process data.")
+    #     else:
+    #         error(fatal[-1])
+    #
+    #
+    # finally:
+    #     run()
 if __name__ == "__main__":
     run()
 

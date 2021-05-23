@@ -1,6 +1,5 @@
 import csv
 import os
-
 from main import *
 
 def welcome():
@@ -211,7 +210,8 @@ def entity_details():
 
 
 def list_entity(entity, cols=[]):
-    global given_list
+    global records2
+    records3 = records2.copy()
     """
     Task 10: Display an entity. Only the data for the specified column indexes will be displayed.
     If no column indexes have been specified, then all the data for the entity will be displayed.
@@ -231,25 +231,26 @@ def list_entity(entity, cols=[]):
 
 
     if entity[1] != []:
-        for item in given_list:
+        for item in records3:
             if entity[0] in item[0:1]:
-                given_list = item[:]
+                records3 = item[:]
 
         index_list = entity[1]
         lisa = []
 
         for item in index_list:
             for i in item:
-                lisa.append(given_list[i])
+                lisa.append(records3[i])
 
         print(f"Showing indexes for entity {entity[0]}:")
         print(lisa)
     else:
-        for item in given_list:
+        for item in records3:
             if entity[0] in item[0:1]:
-                given_list = item[:]
+                records3 = item[:]
         print(f"Showing all the indexes for entity {entity[0]}:")
-        print(given_list)
+        print(records3)
+
 
 
 def list_entities(entities, cols=[]):
@@ -289,12 +290,28 @@ def list_categories(categories):
     :param categories: A dictionary containing category names and a list of entities that are part of that category
     :return: Does not return anything
     """
-    for key, value in categories.items():
-        print("\n" + key,"\n" + "\n",value)
 
+    if 'Lower limits' in categories:
+        for key, value in categories.items():
+            print('-' * len(key))
+            print(key)
+            print('-' * len(key), '\n')
+            print(value, '\n')
+    elif 'Planets' in categories:
+        for key, value in categories.items():
+            print('-' * len(key))
+            print(key)
+            print('-' * len(key), '\n')
+            print(value, '\n')
+    else:
+        for key, value in categories.items():
+            for keys, values in value.items():
+                print('-' * len(key))
+                print(key)
+                print('-' * len(key), '\n')
+                print(keys, values, '\n')
 
 def gravity_range():
-
     """
     Task 13: Ask the user for the lower and upper limits for gravity and return a tuple containing the limits.
 
@@ -355,7 +372,7 @@ def visualise():
     print("Visualise Menu\n1.Entities by type\n2.Entities by gravity\n3.Summary of orbits\n4.Animate gravities")
 
     menu = int(input()) #Ask user for the input
-
+    print(g_range)
     if menu not in range(1,5):
         error(menu)
         return None
@@ -390,7 +407,7 @@ def save():
 #Added the next extra functions as instructed.
 
 def planet_list(path):
-    global given_list
+    global records2
     #This functions is taking one argument and adds data from a CSV file to a variable
 
     if path == None:
@@ -401,19 +418,20 @@ def planet_list(path):
         with open(os.path.join(os.path.dirname(__file__), path), "r") as csvfile:
             csv_reader = csv.reader(csvfile)
             planets = list(csv_reader)
-            given_list = planets
+            records2 = planets
 
         return planets
 
 
 def g_range(categories):
-
+    global atb
+    global records2
     lower_limit = []
     upper_limit = []
     medium_limit = []
     g_dictionary = {}
 
-    for items in given_list[1:]:  # Starting iteration excluding titles
+    for items in records2[1:]:  # Starting iteration excluding titles
 
         if float(items[8]) <= categories[0]:
             lower_limit.append(items[0])
@@ -425,5 +443,6 @@ def g_range(categories):
         g_dictionary["Lower limits"] = lower_limit
         g_dictionary["Medium limits"] = medium_limit
         g_dictionary["Upper limits"] = upper_limit
+        atb = g_dictionary
 
     return g_dictionary
