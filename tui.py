@@ -2,6 +2,7 @@ import csv
 import os
 from main import *
 
+
 def welcome():
     """
     Task 1: Display a welcome message.
@@ -39,29 +40,30 @@ def menu():
     print("Main Menu:\n1.Load Data\n2.Process Data\n3.Visualise Data\n4.Save Data\n5.Exit\n")
 
     while True:
-      main_option = int(input()) #Ask the user for input
-      if main_option not in range(1,6):
-         main_option = None
-         print("Invalid option. Please select a valid option from 1 to 5!\n1.Load Data\n2.Process Data\n3.Visualise Data\n4.Save Data\n5.Exit\n")
-         continue
-      elif main_option == 1:
-        return main_option
+        main_option = int(input())  # Ask the user for input
+        if main_option not in range(1, 6):
+            main_option = None
+            print(
+                "Invalid option. Please select a valid option from 1 to 5!\n1.Load Data\n2.Process Data\n3.Visualise Data\n4.Save Data\n5.Exit\n")
+            continue
+        elif main_option == 1:
+            return main_option
 
-      elif main_option == 2:
-        return main_option
+        elif main_option == 2:
+            return main_option
 
-      elif main_option == 3:
-        return main_option
+        elif main_option == 3:
+            return main_option
 
-      elif main_option == 4:
-        save()
-        return main_option
+        elif main_option == 4:
+            save()
+            return main_option
 
-      elif main_option == 5:
-        print("Hope to see you soon!")
-        return
-      else:
-        return None
+        elif main_option == 5:
+            print("Hope to see you soon!")
+            return main_option
+        else:
+            return None
 
 
 def started(operation):
@@ -119,7 +121,8 @@ def source_data_path():
     :return: None if the file path does not end in 'csv' otherwise return the file path entered by the user
     """
 
-    data_path =input("Please enter the file path for the data file.\n* Do not forget to enter the file extention 'csv' *\n") #Ask the user for the file path
+    data_path = input(
+        "Please enter the file path for the data file.\n* Do not forget to enter the file extension 'csv' *\n")  # Ask the user for the file path
 
     if data_path.endswith(".csv"):
         return data_path
@@ -145,14 +148,14 @@ def process_type():
     :return: None if an invalid selection made otherwise an integer corresponding to a valid option
     """
 
-    #Process data menu
+    # Process data menu
 
-    print("Menu\n1.Retrieve entity\n2.Retrieve entity details\n3.Categorise entities by type\n4.Categorise entities by gravity\n5.Summarise entities by orbit\n")
+    print(
+        "Menu\n1.Retrieve entity\n2.Retrieve entity details\n3.Categorise entities by type\n4.Categorise entities by gravity\n5.Summarise entities by orbit\n")
 
+    menu = int(input())  # Ask the user for input
 
-    menu = int(input()) #Ask the user for input
-
-    if menu in range(1,6):
+    if menu in range(1, 6):
         return menu
     else:
         error(menu)
@@ -160,7 +163,6 @@ def process_type():
 
 
 def entity_name():
-
     """
     Task 8: Read in the name of an entity and return the name.
 
@@ -169,11 +171,12 @@ def entity_name():
 
     :return: the name of an entity
     """
-    print("Please enter the Planet's name:") #Ask user for the planet name
+    print("Please enter the Planet's name:")  # Ask user for the planet name
 
     planet_name = input().capitalize()
 
     return planet_name
+
 
 def entity_details():
     """
@@ -229,7 +232,6 @@ def list_entity(entity, cols=[]):
     :return: does not return anything
     """
 
-
     if entity[1] != []:
         for item in records3:
             if entity[0] in item[0:1]:
@@ -252,9 +254,7 @@ def list_entity(entity, cols=[]):
         print(records3)
 
 
-
 def list_entities(entities, cols=[]):
-
     """
     Task 11: Display each entity in entities. Only the data for the specified column indexes will be displayed.
     If no column indexes have been specified, then all the data for an entity will be displayed.
@@ -293,10 +293,18 @@ def list_categories(categories):
 
     if 'Lower limits' in categories:
         for key, value in categories.items():
-            print('-' * len(key))
-            print(key)
-            print('-' * len(key), '\n')
-            print(value, '\n')
+            if not value:
+                message = f'No {key} exists'
+                print('-' * len(message))
+                print(message)
+                print('-' * len(message),'\n')
+            else:
+                print('-' * len(key))
+                print(key)
+                print('-' * len(key), '\n')
+                print(value, '\n')
+
+
     elif 'Planets' in categories:
         for key, value in categories.items():
             print('-' * len(key))
@@ -310,6 +318,7 @@ def list_categories(categories):
                 print(key)
                 print('-' * len(key), '\n')
                 print(keys, values, '\n')
+
 
 def gravity_range():
     """
@@ -329,9 +338,9 @@ def gravity_range():
 
     upper_gravity = float(input())
 
-    g_range = (lower_gravity, upper_gravity)
+    grav_range = (lower_gravity, upper_gravity)
 
-    return g_range
+    return grav_range
 
 
 def orbits():
@@ -367,13 +376,13 @@ def visualise():
 
     :return: None if an invalid selection is made otherwise an integer corresponding to a valid option
     """
-    #Visualise Menu
+    # Visualise Menu
 
     print("Visualise Menu\n1.Entities by type\n2.Entities by gravity\n3.Summary of orbits\n4.Animate gravities")
 
-    menu = int(input()) #Ask user for the input
+    menu = int(input())  # Ask user for the input
     print(g_range)
-    if menu not in range(1,5):
+    if menu not in range(1, 5):
         error(menu)
         return None
     else:
@@ -398,23 +407,24 @@ def save():
 
     menu = int(input())
 
-    if menu not in range(1,2):
+    if menu not in range(1, 2):
         error(menu)
         return None
     else:
         return menu
 
-#Added the next extra functions as instructed.
+
+# Added the next extra functions as instructed.
 
 def planet_list(path):
     global records2
-    #This functions is taking one argument and adds data from a CSV file to a variable
+    # This functions is taking one argument and adds data from a CSV file to a variable
 
     if path == None:
         path = print("Wrong file path.")
         return path
     else:
-        os_path = path
+
         with open(os.path.join(os.path.dirname(__file__), path), "r") as csvfile:
             csv_reader = csv.reader(csvfile)
             planets = list(csv_reader)

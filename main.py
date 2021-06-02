@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 import csv
 import json
 from tui import *
@@ -8,15 +9,15 @@ records = []
 # This will be used to store the date read from the source data file.
 
 def run():
-    # try:
+    try:
 
         global records
         welcome()
 
         def check_list(check):  # Added function to check if the entity exist in the list
 
-            for item in records:
-                if check == item[0]:
+            for entities in records:
+                if check == entities[0]:
                     print('\n' + check, "has been retrieved.")
                     return check
 
@@ -106,14 +107,14 @@ def run():
                 #       - Use the appropriate function in the module tui to indicate that the orbit summary process has
                 #       started.
                 #       - Use the appropriate function in the module tui to retrieve a list of orbited planets.
-        #       - Iterate through each record in records and find entities that orbit a planet in the list of
-        #       orbited planets.  Assemble the found entities into a nested dictionary such that each entity can be
-        #       accessed as follows:
-        #           name_of_dict[planet_orbited][category]
-        #       where category is "small" if the mean radius of the entity is below 100 and "large" otherwise.
-        #       - Use the appropriate function in the module tui to list the categories.
-        #       - Use the appropriate function in the module tui to indicate that the orbit summary process has
-        #       completed.
+                #       - Iterate through each record in records and find entities that orbit a planet in the list of
+                #       orbited planets.  Assemble the found entities into a nested dictionary such that each entity can be
+                #       accessed as follows:
+                #           name_of_dict[planet_orbited][category]
+                #       where category is "small" if the mean radius of the entity is below 100 and "large" otherwise.
+                #       - Use the appropriate function in the module tui to list the categories.
+                #       - Use the appropriate function in the module tui to indicate that the orbit summary process has
+                #       completed.
                 # TODO: Your code here
 
             elif main_menu == 2:
@@ -136,7 +137,6 @@ def run():
 
                     planet_lst = []
                     not_planet_list = []
-                    dictionary = {}
 
                     for items in records[1:]:  # Starting the iteration excluding titles
                         if items[1] == "TRUE":
@@ -160,8 +160,8 @@ def run():
                     orbit_summary2 = {}
                     planet_dict = {}
                     plist = set()
-                    smalllist = []
-                    biglist = []
+                    small_list = []
+                    big_list = []
                     rec = records.copy()
                     del rec[0]
                     rec.sort(key=lambda x: x[21])
@@ -177,49 +177,53 @@ def run():
                     for items in rec:
                         if float(items[10]) < 100:
                             if items[21] in orbit_summary:
-                                smalllist.append(items[0])
+                                small_list.append(items[0])
                             else:
-                                smalllist = []
+                                small_list = []
                                 for item in plist:
                                     if item == items[21]:
-                                        smalllist.append(items[0])
-                                        planet_dict = {'Small': smalllist}
+                                        small_list.append(items[0])
+                                        planet_dict = {'Small': small_list}
                                         orbit_summary.update({items[21]: planet_dict})
                         else:
-                            if items[21] == "NA":  # Disgarding non oribiting entities
+                            if items[21] == "NA":  # Discarding non orbiting entities
                                 continue
                             else:
                                 if float(items[10]) > 100:
                                     if items[21] in orbit_summary2:
-                                        biglist.append(items[0])
+                                        big_list.append(items[0])
                                     else:
-                                        biglist = []
+                                        big_list = []
                                         for item in plist:
                                             if item == items[21]:
-                                                biglist.append(items[0])
-                                                planet_dict.update({'Large': biglist})
+                                                big_list.append(items[0])
+                                                planet_dict.update({'Large': big_list})
                                                 orbit_summary2.update({items[21]: planet_dict})
 
                     list_categories(orbit_summary)
 
-                    completed(("Orbit summary process"))
+                    completed("Orbit summary process")
             elif main_menu == 3:
                 visual_menu = visualise()
                 started("Visualising data")
 
                 if visual_menu == 1:
-
                     entities_pie(dictionary)
-
                 if visual_menu == 2:
                     from tui import atb
                     entities_bar(atb)
+                if visual_menu == 3:
+                    orbits(orbit_summary)
+                if visual_menu == 4:
+                    gravity_animation(g_range(gravity_range()))
 
-
-                completed("Visulaising data")
-
-
-
+                completed("Visualizing data")
+            elif main_menu == 4:
+                started("Saving data process")
+                if save() == 1:
+                    file_save = Writer(dictionary)
+                    file_save.save_file(dictionary)
+                completed("Saving data process")
             # Task 28: Check if the user selected the option for saving data.  If so, then do the following:
             # - Use the appropriate function in the module tui to indicate that the save data operation has started.
             # - Save the data (see below)
@@ -231,8 +235,6 @@ def run():
             # a JSON file using in the following order: all the planets in alphabetical order followed by non-planets
             # in alphabetical order.
             # TODO: Your code here
-            elif main_menu == 4:
-                save()
             # Task 29: Check if the user selected the option for exiting.  If so, then do the following:
             # # break out of the loop
             elif main_menu == 5:
@@ -242,22 +244,55 @@ def run():
             # TODO: Your code here
             else:
                 error(main_menu)
-    # except Exception:
-    #     import sys
-    #     fatal = str(sys.exc_info()[1]).split()
-    #
-    #     if fatal[-1] == 'assignment':
-    #         print("Error! Please load data before trying to visualise data. If you loaded the data, then please process data afterwards.")
-    #     elif fatal[-1] == 'subscriptable':
-    #         print("Error! Please load data before trying to process data.")
-    #     elif fatal[-1] == 'defined':
-    #         print("Error! Please load data before trying to process data.")
-    #     else:
-    #         error(fatal[-1])
-    #
-    #
-    # finally:
-    #     run()
+
+
+    except Exception:
+        import sys
+        fatal = str(sys.exc_info()[1]).split()
+
+        if fatal[-1] == 'assignment':
+            print("Error! Please load data before trying to visualise data. If you loaded the data, then please process data afterwards.")
+        elif fatal[-1] == 'subscriptable':
+            print("Error! Please load data before trying to process data.")
+        elif fatal[-1] == 'defined':
+            print("Error! Please load data before trying to process data.")
+        elif fatal[-1] == 'range':
+            print("Error! Please load data before trying to visualise data. If you loaded the data, then please process data afterwards.")
+        else:
+            error(fatal[-1])
+
+    finally:
+        if main_menu == 5:
+            import time
+            time.sleep(3)
+            exit(0)
+        else:
+            run()
+
+
+class AbstractWriter(ABC):
+
+    def __init__(self, path):
+        self.path = path
+
+    @abstractmethod
+    def save_file(self, path):
+        self.path = path
+        return self
+
+
+class Writer(AbstractWriter):
+
+    def __init__(self, path):
+        self.path = path
+
+    def save_file(self, path):
+        self.path = path
+        d2 = {x: sorted(self.path[x]) for x in self.path.keys()}
+        with open('sorted_data.json', 'w') as outfile:
+            json.dump(d2, outfile)
+
+        return self
+
 if __name__ == "__main__":
     run()
-
