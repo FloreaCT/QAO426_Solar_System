@@ -3,6 +3,33 @@ import csv
 import json
 from tui import *
 from visual import *
+
+
+class AbstractWriter(ABC):
+
+    def __init__(self, path):
+        self.path = path
+
+    @abstractmethod
+    def save_file(self, path):
+        self.path = path
+        return self
+
+
+class Writer(AbstractWriter):
+
+    def __init__(self, path):
+        self.path = path
+
+    def save_file(self, path):
+        self.path = path
+        d2 = {x: sorted(self.path[x]) for x in self.path.keys()}
+        with open('sorted_data.json', 'w') as outfile:
+            json.dump(d2, outfile)
+
+        return self
+
+
 records = []
 
 # Task 18: Create an empty list named 'records'.
@@ -14,13 +41,16 @@ def run():
         global records
         welcome()
 
-        def check_list(check):  # Added function to check if the entity exist in the list
+        def check_list(check):
+            """
+            Added this function to extend the capabilities of entity_name() function because the requirement for entity_name
+            was just to return a name.
+            """
 
             for entities in records:
                 if check == entities[0]:
                     print('\n' + check, "has been retrieved.")
                     return check
-
             print(check, "is not in the database.")
             return None
 
@@ -238,6 +268,7 @@ def run():
             # Task 29: Check if the user selected the option for exiting.  If so, then do the following:
             # # break out of the loop
             elif main_menu == 5:
+                print("See you next time!")
                 break
             # Task 30: If the user selected an invalid option then use the appropriate function of the module tui to
             # display an error message
@@ -264,35 +295,11 @@ def run():
     finally:
         if main_menu == 5:
             import time
-            time.sleep(3)
+            time.sleep(2)
             exit(0)
         else:
             run()
 
-
-class AbstractWriter(ABC):
-
-    def __init__(self, path):
-        self.path = path
-
-    @abstractmethod
-    def save_file(self, path):
-        self.path = path
-        return self
-
-
-class Writer(AbstractWriter):
-
-    def __init__(self, path):
-        self.path = path
-
-    def save_file(self, path):
-        self.path = path
-        d2 = {x: sorted(self.path[x]) for x in self.path.keys()}
-        with open('sorted_data.json', 'w') as outfile:
-            json.dump(d2, outfile)
-
-        return self
 
 if __name__ == "__main__":
     run()

@@ -54,7 +54,7 @@ def orbits(summary):
     """
     Task 26: Display subplots where each subplot shows the "small" and "large" entities that orbit the planet.
 
-    Summary is a n  ested dictionary of the form:
+    Summary is a nested dictionary of the form:
     summary = {
         "orbited planet": {
             "small": [entity, entity, entity],
@@ -139,10 +139,6 @@ def gravity_animation(categories):
     small_list = len(categories['Lower limits'])
     medium_list = len(categories['Medium limits'])
     large_list = len(categories['Upper limits'])
-
-    a = list(range(len(categories['Lower limits'])))
-    b = list(range(len(categories['Medium limits'])))
-    c = list(range(len(categories['Upper limits'])))
 
     fig = plt.figure()
 
