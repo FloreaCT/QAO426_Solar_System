@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 import csv
 import json
+import tui
 from tui import *
 from visual import *
 
@@ -36,23 +37,33 @@ records = []
 # This will be used to store the date read from the source data file.
 
 def run():
-    try:
+    # try:
 
         global records
         welcome()
 
         def check_list(check):
             """
-            Added this function to extend the capabilities of entity_name() function because the requirement for entity_name
-            was just to return a name.
+            Added this function to extend the capabilities of entity_name() because the requirement for entity_name
+            was just to return a name. It will be used for orbits() from tui.py as well.
             """
-
-            for entities in records:
-                if check == entities[0]:
-                    print('\n' + check, "has been retrieved.")
-                    return check
-            print(check, "is not in the database.")
-            return None
+            if type(check) == list:
+                clist = []
+                for entities in records:
+                    for items in check:
+                        if items == entities[0]:
+                            print('\n' + items, "has been retrieved.")
+                            clist.append(items)
+                        elif items != entities[0]:
+                            continue
+                return clist
+            else:
+                for entities in records:
+                    if check == entities[0]:
+                        print('\n' + check, "has been retrieved.")
+                        return check
+                print(check, "is not in the database.")
+                return None
 
         while True:
             # Task 20: Using the appropriate function in the module tui, display a menu of options
@@ -181,57 +192,48 @@ def run():
 
                 elif second_menu == 4:
                     started("Categorisation by entity gravity process")
-                    list_categories(g_range(gravity_range()))
+                    lower_limit = []
+                    upper_limit = []
+                    medium_limit = []
+                    g_dictionary = {}
+                    grange = gravity_range()
+                    for items in records[1:]:  # Starting iteration excluding titles
+
+                        if float(items[8]) <= grange[0]:
+                            lower_limit.append(items[0])
+                        elif float(items[8]) >= grange[1]:
+                            upper_limit.append(items[0])
+                        else:
+                            if float(items[8]) >= grange[0] and float(items[8]) <= grange[1]:
+                                medium_limit.append(items[0])
+                        g_dictionary["Lower limits"] = lower_limit
+                        g_dictionary["Medium limits"] = medium_limit
+                        g_dictionary["Upper limits"] = upper_limit
+                    list_categories(g_dictionary)
                     completed("Categorisation by entity gravity process")
 
                 elif second_menu == 5:
                     started("Orbit summary process")
-                    orbit_summary = {}
-                    orbit_summary2 = {}
-                    planet_dict = {}
-                    plist = set()
-                    small_list = []
-                    big_list = []
-                    rec = records.copy()
-                    del rec[0]
-                    rec.sort(key=lambda x: x[21])
-
-                    for items in rec:
-                        if items[21] == "NA":
-                            continue
-                        else:
-                            if items[21] in plist:
-                                continue
-                            else:
-                                plist.add(items[21])
-                    for items in rec:
-                        if float(items[10]) < 100:
-                            if items[21] in orbit_summary:
-                                small_list.append(items[0])
-                            else:
-                                small_list = []
-                                for item in plist:
-                                    if item == items[21]:
-                                        small_list.append(items[0])
-                                        planet_dict = {'Small': small_list}
-                                        orbit_summary.update({items[21]: planet_dict})
-                        else:
-                            if items[21] == "NA":  # Discarding non orbiting entities
-                                continue
-                            else:
-                                if float(items[10]) > 100:
-                                    if items[21] in orbit_summary2:
-                                        big_list.append(items[0])
-                                    else:
-                                        big_list = []
-                                        for item in plist:
-                                            if item == items[21]:
-                                                big_list.append(items[0])
-                                                planet_dict.update({'Large': big_list})
-                                                orbit_summary2.update({items[21]: planet_dict})
-
-                    list_categories(orbit_summary)
-
+                    orbited = check_list(tui.orbits())
+                    if not orbited:
+                        print('Please enter the correct name of the planet')
+                        run()
+                    else:
+                        orbit_dictionary = {}
+                        for orb_item in orbited:
+                            smallish = []
+                            largeish = []
+                            for rec_item in records:
+                                if rec_item[21] == 'NA':
+                                    continue
+                                elif orb_item != rec_item[21]:
+                                    continue
+                                elif orb_item == rec_item[21] and float(rec_item[10]) < 100:
+                                        smallish.append(rec_item[0])
+                                elif orb_item == rec_item[21] and float(rec_item[10]) > 100:
+                                    largeish.append(rec_item[0])
+                                orbit_dictionary[orb_item] = {"Small": smallish, "Large": largeish}
+                    list_categories(orbit_dictionary)
                     completed("Orbit summary process")
             elif main_menu == 3:
                 visual_menu = visualise()
@@ -240,12 +242,11 @@ def run():
                 if visual_menu == 1:
                     entities_pie(dictionary)
                 if visual_menu == 2:
-                    from tui import atb
-                    entities_bar(atb)
+                    entities_bar(g_dictionary)
                 if visual_menu == 3:
-                    orbits(orbit_summary)
+                    orbits(orbit_dictionary)
                 if visual_menu == 4:
-                    gravity_animation(g_range(gravity_range()))
+                    gravity_animation(g_dictionary)
 
                 completed("Visualizing data")
             elif main_menu == 4:
@@ -277,28 +278,28 @@ def run():
                 error(main_menu)
 
 
-    except Exception:
-        import sys
-        fatal = str(sys.exc_info()[1]).split()
-
-        if fatal[-1] == 'assignment':
-            print("Error! Please load data before trying to visualise data. If you loaded the data, then please process data afterwards.")
-        elif fatal[-1] == 'subscriptable':
-            print("Error! Please load data before trying to process data.")
-        elif fatal[-1] == 'defined':
-            print("Error! Please load data before trying to process data.")
-        elif fatal[-1] == 'range':
-            print("Error! Please load data before trying to visualise data. If you loaded the data, then please process data afterwards.")
-        else:
-            error(fatal[-1])
-
-    finally:
-        if main_menu == 5:
-            import time
-            time.sleep(2)
-            exit(0)
-        else:
-            run()
+    # except Exception:
+    #     import sys
+    #     fatal = str(sys.exc_info()[1]).split()
+    #
+    #     if fatal[-1] == 'assignment':
+    #         print("Error! Please load data before trying to visualise data. If you loaded the data, then please process data afterwards.")
+    #     elif fatal[-1] == 'subscriptable':
+    #         print("Error! Please load data before trying to process data.")
+    #     elif fatal[-1] == 'defined':
+    #         print("Error! Please load data before trying to process data.")
+    #     elif fatal[-1] == 'range':
+    #         print("Error! Please load data before trying to visualise data. If you loaded the data, then please process data afterwards.")
+    #     else:
+    #         error(fatal[-1])
+    #
+    # finally:
+    #     if main_menu == 5:
+    #         import time
+    #         time.sleep(2)
+    #         exit(0)
+    #     else:
+    #         run()
 
 
 if __name__ == "__main__":

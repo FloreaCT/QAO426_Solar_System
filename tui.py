@@ -357,6 +357,10 @@ def orbits():
     print("Please enter the names of the entities you would like to see. e.g Earth,Moon,Venus")
 
     entities_name = list(input().split(","))
+    entities_name = [item.capitalize() for item in entities_name]
+
+    if not entities_name:
+        return None
 
     return entities_name
 
@@ -418,8 +422,8 @@ def planet_list(path):
     """
     This function was created as per Task 21 from main.py request: 
         To load the data, it is recommended that you create and call one or more separate functions that do the
-            following
-    The functionality of this function could have been implemented in source_data_path() but that was not a requirement if the function
+        following
+    Its functionality could have been implemented in source_data_path() but that was not a requirement of the function
     """
     # This functions is taking one argument and adds data from a CSV file to a variable
 
@@ -435,32 +439,33 @@ def planet_list(path):
 
         return planets
 
-
-def g_range(categories):
-    global atb # This variable is storing the data that will eventually be used in entities_bar if needed. It is declared as global so it can
-    #exist outside the function.
-
-    global records2 #This variable was declared in planet_list() and it is used as a copy of records
-
-    lower_limit = []
-    upper_limit = []
-    medium_limit = []
-    g_dictionary = {}
-
-    for items in records2[1:]:  # Starting iteration excluding titles
-
-        if float(items[8]) <= categories[0]:
-            lower_limit.append(items[0])
-        elif float(items[8]) >= categories[1]:
-            upper_limit.append(items[0])
-        else:
-            if float(items[8]) >= categories[0] and float(items[8]) <= categories[1]:
-                medium_limit.append(items[0])
-        g_dictionary["Lower limits"] = lower_limit
-        g_dictionary["Medium limits"] = medium_limit
-        g_dictionary["Upper limits"] = upper_limit
-
-        atb = g_dictionary #We needed a copy of g_dictionary that will be called in main.py. Since g_dictionary wont exist after the function
-        # ends, we made a copy of g_dictionary that will be later used in main.py
-
-    return g_dictionary
+#
+# def g_range(categories):
+#
+#     global atb # This variable is storing the data that will eventually be used in entities_bar if needed. It is declared as global so it can
+#     #exist outside the function.
+#
+#     global records2 #This variable was declared in planet_list() and it is used as a copy of records
+#
+#     lower_limit = []
+#     upper_limit = []
+#     medium_limit = []
+#     g_dictionary = {}
+#
+#     for items in records2[1:]:  # Starting iteration excluding titles
+#
+#         if float(items[8]) <= categories[0]:
+#             lower_limit.append(items[0])
+#         elif float(items[8]) >= categories[1]:
+#             upper_limit.append(items[0])
+#         else:
+#             if float(items[8]) >= categories[0] and float(items[8]) <= categories[1]:
+#                 medium_limit.append(items[0])
+#         g_dictionary["Lower limits"] = lower_limit
+#         g_dictionary["Medium limits"] = medium_limit
+#         g_dictionary["Upper limits"] = upper_limit
+#
+#         atb = g_dictionary #We needed a copy of g_dictionary that will be called in main.py. Since g_dictionary wont exist after the function
+#         # ends, we made a copy of g_dictionary that will be later used in main.py
+#
+#     return g_dictionary
