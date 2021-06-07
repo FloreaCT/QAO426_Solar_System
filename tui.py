@@ -1,6 +1,6 @@
 import csv
-import os
 from main import *
+import os  # We imported os in order to use relative path when loading/saving files and use current directory
 
 
 def welcome():
@@ -38,11 +38,17 @@ def menu():
     # Main menu
 
     print("Main Menu:\n1.Load Data\n2.Process Data\n3.Visualise Data\n4.Save Data\n5.Exit\n")
+
     main_option = input()  # Ask the user for input
+    # Because the task is specifically asking for an integer, we need to verify if the input is a number
+    # The bellow method was used in order to prevent any errors from stopping the script
     if main_option.isnumeric():
         return int(main_option)
     else:
+        # Although the task is asking for a None return, i have chosen to return the main_menu in order to show the user
+        # an error if a invalid option is selected(e.g A or B instead of 1 or 2)
         return main_option
+
 
 def started(operation):
     """
@@ -98,9 +104,11 @@ def source_data_path():
 
     :return: None if the file path does not end in 'csv' otherwise return the file path entered by the user
     """
+    # Ask the user for the path of the CSV file
+    data_path = input(
+        "Please enter the file path for the data file.\n* Do not forget to enter the file extension 'csv' *\n")
 
-    data_path = input("Please enter the file path for the data file.\n* Do not forget to enter the file extension 'csv' *\n")  # Ask the user for the file path
-
+    # Verifying if the input is ending with .csv, otherwise show and error
     if data_path.endswith(".csv"):
         return data_path
     else:
@@ -128,14 +136,17 @@ def process_type():
     # Process data menu
 
     print(
-        "Menu\n1.Retrieve entity\n2.Retrieve entity details\n3.Categorise entities by type\n4.Categorise entities by gravity\n5.Summarise entities by orbit\n")
+        "Menu\n1.Retrieve entity\n2.Retrieve entity details\n3.Categorise entities by type\n4.Categorise entities by "
+        "gravity\n5.Summarise entities by orbit\n")
 
-    menu = int(input())  # Ask the user for input
+    # Ask the user for input
+    process_menu = int(input())
 
-    if menu in range(1, 6):
-        return menu
+    # Checking if the input is correct, otherwise throw an error
+    if process_menu in range(1, 6):
+        return process_menu
     else:
-        error(menu)
+        error(process_menu)
         return None
 
 
@@ -148,8 +159,9 @@ def entity_name():
 
     :return: the name of an entity
     """
-    print("Please enter the entity's name:")  # Ask user for the planet name
+    print("Please enter the entity's name:")
 
+    # Ask user for a planet name and capitalize first letter
     planet_name = input().capitalize()
 
     return planet_name
@@ -167,31 +179,34 @@ def entity_details():
     :return: A list containing the name of an entity and a list of column indexes
     """
 
-    print("\nPlease enter the name of the planet")  # Ask the user for a planet name
+    print("\nPlease enter the name of the planet")
 
+    # Ask the user for a planet name and capitalize first letter
     entity = input().capitalize()
 
-    print(f"\nAt which index of the planet we should look?")  # Ask the user for an index
+    print(f"\nAt which index of the planet we should look?")
 
-    cols = []  # Defining the index list
+    # Defining the index list
+    cols = []
 
+    # Ask the user for an index to be shown
     col_nr = input()
 
+    # Checking if the user entered some indexes.
     if len(col_nr) > 0:
-        index = col_nr.split(",")
+        index = col_nr.split(",")  # Splitting the list entered by the user, since its a string and not integers
         print("")
         for i in range(0, len(index)):
-            index[i] = int(index[i])
+            index[i] = int(index[i])  # Converting the strings to integers
         cols.append(index)
         return entity, cols
+    # If the user didn't enter any indexes we will return an empty list
     else:
         cols = []
         return entity, cols
 
 
 def list_entity(entity, cols=[]):
-    global records2
-    records3 = records2.copy()
     """
     Task 10: Display an entity. Only the data for the specified column indexes will be displayed.
     If no column indexes have been specified, then all the data for the entity will be displayed.
@@ -208,29 +223,45 @@ def list_entity(entity, cols=[]):
     :param cols: A list of integer values that represent column indexes
     :return: does not return anything
     """
+    # Making a copy of the records, because we will alter the list in the current function
+    records3 = records2.copy()
 
-    if entity[1] != []:
-        for item in records3:
-            if entity[0] in item[0:1]:
-                records3 = item[:]
+    # Verifying if the entity is in the database
+    the_entity = check_list(entity[0])
 
-        index_list = entity[1]
-        lisa = []
-
-        for item in index_list:
-            for i in item:
-                lisa.append(records3[i])
-
-        print(f"Showing indexes for entity {entity[0]}:")
-        print(lisa)
-        del records3
+    # If the entity is not in the database, do nothing. An error is printed within the check_list function beforehand.
+    if the_entity is None:
+        pass
     else:
-        for item in records3:
-            if entity[0] in item[0:1]:
-                records3 = item[:]
-        print(f"Showing all the indexes for entity {entity[0]}:")
-        print(records3)
-        del records3
+        # If the user enter indexes in the early function, we will proceed as follow:
+        if entity[1] != []:
+            for item in records3:
+                if the_entity in item[0:1]:  # We need to retrieve the row where we found the entity
+                    records3 = item[:]  # records3 is becoming a list of the data from the entities row
+
+            # Creating a list to added the specific indexes from the planet
+            lisa = []
+
+            # entity[1] is cols from previous function
+            for item in entity[1]:
+                for i in item:
+                    lisa.append(records3[i])  # Adding the indexes to the list created earlier
+
+            print(f"\nShowing indexes for entity {entity[0]}:")
+            print(lisa)
+            # Since records3 is now altered we can dispose of it. A new copy will be made when the function will be
+            # called again
+            del records3
+        else:
+            for item in records3:
+                if entity[0] in item[0:1]:
+                    records3 = item[:]
+            print(f"\nShowing all the indexes for entity {entity[0]}:")
+            print(records3)
+            # Since records3 is now altered we can dispose of it. A new copy will be made when the function will be
+            # called again
+            del records3
+
 
 def list_entities(entities, cols=[]):
     """
@@ -255,28 +286,48 @@ def list_entities(entities, cols=[]):
     """
     # TODO: Your code here
     global records2
-    records3 = records2.copy()
 
-    # [[eart,2],[moon,2]],[1,2]
-    if entity[1] != []:
-        for item in records3:
-            if entity[0] in item[0:1]:
-                records3 = item[:]
+    divided_list = entities[0].split(",")
+    # Using a short code to capitalizing each item inside the list
+    divided_list = [item.capitalize() for item in divided_list]
 
-        index_list = entity[1]
-        lisa = []
+    # Creating a list which will gather all the indexes from the specified planets
+    list_of_entities = []
+
+    # Checking ig the list is not empty
+    if entities[1] != []:
+        for item in records2:
+            for items in divided_list:
+                if items in item[0:1]:
+                    x = item[:]
+                    list_of_entities.append(x)
+
+        index_list = entities[1][0]
+        # Creating 2 empty list
+        lisa = []  # This list will have inside multiple list (lisb)
+        lisb = []  # This list will contain only the specified indexes for their respective entity
 
         for item in index_list:
-            for i in item:
-                lisa.append(records3[i])
+            for items in list_of_entities:
+                lisb.append(items[item])
+            lisa.append(lisb)
+            lisb = []
 
-        print(f"Showing indexes for entity {entity[0]}:")
-        print(lisa)
-        del records3
+        print(f"\nShowing indexes {entities[1][0]} for entity {divided_list}:")
+        for item in lisa:  # Displaying every list on a different line
+            print(item)
+
     else:
-        for item in records3:
-            print(f'{item} \n')
-        del records3
+        # If the list of indexes provided by the user is empty then:
+        for item in records2:
+            for items in divided_list:
+                if items in item[0:1]:
+                    x = item[:]  # If we find the item in the list, then we will capture all the indexes here
+                    list_of_entities.append(x)  # Adding a list with all the indexes to this list
+        print(f"\nShowing all indexes for entity {divided_list}:\n")
+        for item in list_of_entities:  # Displaying every list on a different line
+            print(item)
+
 
 def list_categories(categories):
     """
@@ -290,27 +341,28 @@ def list_categories(categories):
     :param categories: A dictionary containing category names and a list of entities that are part of that category
     :return: Does not return anything
     """
-
+    # Since the function is used to check 3 different dictionary, i've implemented 3 different displaying options
+    # The first one is used for gravity.
     if 'Lower limits' in categories:
         for key, value in categories.items():
             if not value:
                 message = f'No {key} exists'
                 print('-' * len(message))
                 print(message)
-                print('-' * len(message),'\n')
+                print('-' * len(message), '\n')
             else:
                 print('-' * len(key))
                 print(key)
                 print('-' * len(key), '\n')
                 print(value, '\n')
-
-
+    # The second one is used for planet types
     elif 'Planets' in categories:
         for key, value in categories.items():
             print('-' * len(key))
             print(key)
             print('-' * len(key), '\n')
             print(value, '\n')
+    # The third one is used for orbits
     else:
         for key, value in categories.items():
             for keys, values in value.items():
@@ -332,20 +384,20 @@ def gravity_range():
     """
     print("Please enter a value for the lower gravity limit")
 
-    lower_gravity = float(input())
+    lower_gravity = float(input())  # Converting input into float
 
     print("Please enter a value for the upper gravity limit")
 
-    upper_gravity = float(input())
+    upper_gravity = float(input())  # Converting input into float
 
-    grav_range = (lower_gravity, upper_gravity)
+    grav_range = (lower_gravity, upper_gravity)  # Making a tuple for lower and upper gravity
 
     return grav_range
 
 
 def orbits():
     """
-    Task 14: Ask the user for a list of entity names and return the list.
+        Task 14: Ask the user for a list of entity names and return the list.
 
     The function should prompt the user to enter a list of entity names e.g. Jupiter,Earth,Mars
     The list represents the entities that should be orbited.
@@ -356,9 +408,12 @@ def orbits():
     """
     print("Please enter the names of the entities you would like to see. e.g Earth,Moon,Venus")
 
+    # Splitting the input by , and converting it into a list
     entities_name = list(input().split(","))
+    # Using a short code to capitalizing each item inside the list
     entities_name = [item.capitalize() for item in entities_name]
 
+    # If no entity has been enter we will return None
     if not entities_name:
         return None
 
@@ -384,13 +439,15 @@ def visualise():
 
     print("Visualise Menu\n1.Entities by type\n2.Entities by gravity\n3.Summary of orbits\n4.Animate gravities")
 
-    menu = int(input())  # Ask user for the input
-    print(g_range)
-    if menu not in range(1, 5):
-        error(menu)
+    # Ask user for the input
+    visual_menu = int(input())
+
+    # Checking if the user has given a correct option
+    if visual_menu not in range(1, 5):
+        error(visual_menu)
         return None
     else:
-        return menu
+        return visual_menu
 
 
 def save():
@@ -409,63 +466,63 @@ def save():
     """
     print("Menu\n1.Export as JSON\n")
 
-    menu = int(input())
+    # Ask user for input
+    export_menu = int(input())
 
-    if menu not in range(1, 2):
-        error(menu)
+    # Checking if the user has given a correct option
+    if export_menu not in range(1, 2):
+        error(export_menu)
         return None
     else:
-        return menu
+        return export_menu
+
 
 def planet_list(path):
-    global records2 # We are declaring this global so we can use it variable later on in the program
+    global records2  # We are declaring this global so we can use the variable later on in the program
     """
     This function was created as per Task 21 from main.py request: 
         To load the data, it is recommended that you create and call one or more separate functions that do the
         following
-    Its functionality could have been implemented in source_data_path() but that was not a requirement of the function
+    Its functionality could have been implemented in source_data_path() but that was not a requirement of that function
     """
     # This functions is taking one argument and adds data from a CSV file to a variable
 
-    if path == None:
-        path = print("\nWrong file path.")
+    if path is None:
+        print("\nWrong file path.")
         return path
 
     else:
-        with open(path, "r") as csvfile:
+        # We are using os in order to get the current directory (relative path)
+        with open(os.path.join(os.path.dirname(__file__), path), "r") as csvfile:
             csv_reader = csv.reader(csvfile)
             planets = list(csv_reader)
-            records2 = planets
+            records2 = planets  # Making a copy of the list that will be used in tui.py
 
         return planets
 
-#
-# def g_range(categories):
-#
-#     global atb # This variable is storing the data that will eventually be used in entities_bar if needed. It is declared as global so it can
-#     #exist outside the function.
-#
-#     global records2 #This variable was declared in planet_list() and it is used as a copy of records
-#
-#     lower_limit = []
-#     upper_limit = []
-#     medium_limit = []
-#     g_dictionary = {}
-#
-#     for items in records2[1:]:  # Starting iteration excluding titles
-#
-#         if float(items[8]) <= categories[0]:
-#             lower_limit.append(items[0])
-#         elif float(items[8]) >= categories[1]:
-#             upper_limit.append(items[0])
-#         else:
-#             if float(items[8]) >= categories[0] and float(items[8]) <= categories[1]:
-#                 medium_limit.append(items[0])
-#         g_dictionary["Lower limits"] = lower_limit
-#         g_dictionary["Medium limits"] = medium_limit
-#         g_dictionary["Upper limits"] = upper_limit
-#
-#         atb = g_dictionary #We needed a copy of g_dictionary that will be called in main.py. Since g_dictionary wont exist after the function
-#         # ends, we made a copy of g_dictionary that will be later used in main.py
-#
-#     return g_dictionary
+
+def check_list(check):
+    """
+    Added this function to extend the capabilities of entity_name() because the requirement for entity_name
+    was just to return a name. It will be used for orbits() as well.
+    """
+
+    # Checking if the argument is a list:
+    if type(check) == list:
+        clist = []  # Creating an empty list
+        for entities in records2:
+            for items in check:
+                if items == entities[0]:  # Checking if a entity exists in the database
+                    print('\n' + items, "has been retrieved.")
+                    clist.append(items)
+                elif items != entities[0]:
+                    continue
+        return clist
+    # If the argument is not a string, then:
+    else:
+        for entities in records2:
+            if check == entities[0]:  # Checking if the entity exists in the database
+                print('\n' + check, "has been retrieved.")
+                return check
+        print(check, "is not in the database.")
+        return None
